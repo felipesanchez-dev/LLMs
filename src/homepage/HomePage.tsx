@@ -1,119 +1,203 @@
-'use client';
-import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faCircleDollarToSlot, faEnvelope, faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-import s from './HomePage.module.scss';
-import { Tooltip } from '../utils/Tooltip';
+"use client";
+import { faGithub, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import s from "./HomePage.module.scss";
+import { Tooltip } from "../utils/Tooltip";
 
 export const HomePage: React.FC = () => {
-    let [emailText, setEmailText] = useState('');
-    let router = useRouter();
+    const [emailText, setEmailText] = useState("");
+    const router = useRouter();
 
     function showEmail(ev: React.MouseEvent) {
-        let last = 'bycroft';
-        let first = 'brendan';
-        let domain = 'moc.liamg';
-        domain = [...domain].reverse().join('');
-        let at = '_' + 'at' + '_';
-        setEmailText(text => text ? '' : `${first}.${last} ${at} ${domain}`);
+        const emailParts = ["jfelipe", "9.121", "@", "gmail", ".", "com"];
+        const email = emailParts.join("");
+        setEmailText((text) => (text ? "" : email));
         ev.stopPropagation();
         ev.preventDefault();
     }
 
     function externalIcon() {
-        return <FontAwesomeIcon icon={faUpRightFromSquare} fontSize={10} className='ml-3 mr-1 relative top-[-1px]' />;
+        return (
+            <FontAwesomeIcon
+                icon={faUpRightFromSquare}
+                fontSize={10}
+                className="ml-3 mr-1 relative top-[-1px]"
+            />
+        );
     }
 
-    return <div className={s.homePage}>
-        <div className={s.headerSection}>
-            <div className={s.profilePic}>
-                <img src="/me.jpeg" alt="Profile Picture" />
-            </div>
-            <div className={s.nameSection}>
-                <div className={s.name}>
-                    Brendan Bycroft
+    return (
+        <div className={s.homePage}>
+            <div className={s.headerSection}>
+                <div className={s.profilePic}>
+                    <img src="/me.jpg" alt="Profile Picture" />
                 </div>
-                <div className={s.subhead}>
-                    Software Engineer
-                </div>
-                <div className={s.links}>
-                    <Tooltip tip={<>Github /bbycroft {externalIcon()}</>}>
-                        <a href="https://github.com/bbycroft" rel="noopener noreferrer" target="_blank">
-                            <FontAwesomeIcon icon={faGithub} />
-                        </a>
-                    </Tooltip>
-                    <Tooltip tip={<>Twitter @brendanbycroft {externalIcon()}</>}>
-                        <a href="https://twitter.com/brendanbycroft" rel="noopener noreferrer" target="_blank">
-                            <FontAwesomeIcon icon={faTwitter} />
-                        </a>
-                    </Tooltip>
-                    <Tooltip tip={`Click to ${emailText ? 'Hide' : 'Reveal'}`}>
-                        <a onClick={showEmail}>
-                            <FontAwesomeIcon icon={faEnvelope} />
-                        </a>
-                    </Tooltip>
-                    <Tooltip tip={<>Tip securely via Stripe {externalIcon()}</>}>
-                        <a href="https://donate.stripe.com/dR68yQbhxauue8E6oo" rel="noopener noreferrer" target="_blank">
-                            <FontAwesomeIcon icon={faCircleDollarToSlot} />
-                        </a>
-                    </Tooltip>
-                </div>
-                <div className={s.emailText}>{emailText}</div>
-            </div>
-        </div>
+                <div className={s.nameSection}>
+                    <div className={s.name}>Felipe Reyes Sánchez</div>
+                    <div className={s.subhead}>Ingeniero de Software</div>
+                    <div className={s.links}>
+                        <Tooltip
+                            tip={
+                                <>GitHub /felipesanchez-dev {externalIcon()}</>
+                            }
+                        >
+                            <a
+                                href="https://github.com/felipesanchez-dev"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                aria-label="GitHub felipesanchez-dev"
+                            >
+                                <FontAwesomeIcon icon={faGithub} />
+                            </a>
+                        </Tooltip>
 
-        <div className={s.projectsSection}>
-            <div className={s.sectionTitle}>Projects</div>
-            <div className={s.projectCard} onClick={() => router.push('/llm')}>
-                <div className={s.cardImageWrapper}>
-                    <div className={s.cardImage}>
-                        <img src="/images/llm-viz-screenshot2.png" alt="LLM Visualization Screenshot" />
+                        <Tooltip
+                            tip={
+                                <>
+                                    Instagram /felipesanchez_dev{" "}
+                                    {externalIcon()}
+                                </>
+                            }
+                        >
+                            <a
+                                href="https://www.instagram.com/felipesanchez_dev"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                aria-label="Instagram felipesanchez_dev"
+                            >
+                                <FontAwesomeIcon icon={faInstagram} />
+                            </a>
+                        </Tooltip>
+
+                        <Tooltip tip={<>Sitio Web Personal {externalIcon()}</>}>
+                            <a
+                                href="https://felipesanchezdev.site/"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                aria-label="Sitio web personal"
+                            >
+                                <FontAwesomeIcon icon={faUpRightFromSquare} />
+                            </a>
+                        </Tooltip>
+                    </div>
+
+                    <div className={s.emailText} onClick={showEmail}>
+                        {emailText || "Clic para mostrar email"}
                     </div>
                 </div>
-                <div className={s.cardContent}>
-                    <div className={s.cardTitle}>
-                        <Link href={"/llm"}>
-                        {/* rel="noopener noreferrer" target="_blank"> */}
-                            LLM Visualization
-                        </Link>
+            </div>
+
+            <div className={s.projectsSection}>
+                <div
+                    className={s.projectCard}
+                    onClick={() => router.push("/llm")}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) =>
+                        e.key === "Enter" || e.key === " "
+                            ? router.push("/llm")
+                            : null
+                    }
+                >
+                    <div className={s.cardImageWrapper}>
+                        <div className={s.cardImage}>
+                            <img
+                                src="/logo.png"
+                                alt="Captura de pantalla de LLM Visualization"
+                            />
+                        </div>
                     </div>
-                    <div className={s.cardText}>
-                        A visualization and walkthrough of the LLM algorithm that backs OpenAI's ChatGPT.
-                        Explore the algorithm down to every add & multiply, seeing the whole process in action.
+
+                    <div className={s.cardContent}>
+                        <div className={s.cardTitle}>
+                            <Link href="/llm">
+                                LLM Visualization en Español
+                            </Link>
+                        </div>
+                        <div className={s.cardText}>
+                            Una visualización interactiva y educativa del
+                            algoritmo de LLMs (Large Language Models) que
+                            impulsa ChatGPT y otros modelos de IA. Explora cada
+                            operación matemática, desde multiplicaciones
+                            matriciales hasta mecanismos de atención, todo
+                            explicado paso a paso en español para democratizar
+                            el entendimiento de la inteligencia artificial.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className={s.divider} />
+
+            <div className={s.projectsSection}>
+                <div className={s.sectionTitle}>Acerca del Proyecto</div>
+
+                <div className={s.bioText}>
+                    <p>
+                        ¡Hola! Soy Felipe, un ingeniero de software dedicado a
+                        democratizar el conocimiento de la inteligencia
+                        artificial. Este sitio web está inspirado en el
+                        increíble trabajo open source de{" "}
+                        <span className="font-bold">Brendan Bycroft</span> y
+                        representa mi compromiso con hacer que conceptos
+                        complejos de machine learning sean accesibles para la
+                        comunidad hispanohablante.
+                    </p>
+
+                    <p>
+                        Mi objetivo es crear un puente entre la investigación
+                        avanzada en IA y desarrolladores, estudiantes y
+                        entusiastas que desean comprender cómo funcionan
+                        realmente los modelos de lenguaje. A través de
+                        visualizaciones interactivas y explicaciones detalladas
+                        en español, buscamos que cualquier persona pueda
+                        explorar y entender la magia detrás de ChatGPT y
+                        similares.
+                    </p>
+
+                    <div
+                        className={s.creditsCard}
+                        aria-label="Reconocimientos del proyecto"
+                    >
+                        <div className={s.creditsTitle}>Reconocimientos</div>
+
+                        <div className={s.creditItem}>
+                            <span className={s.label}>Creador Original:</span>
+                            <span className={s.value}>Brendan Bycroft</span>
+                        </div>
+
+                        <div className={s.creditItem}>
+                            <span className={s.label}>Sitio Web Oficial:</span>
+                            <span className={s.value}>
+                                <a
+                                    href="https://bbycroft.net"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    bbycroft.net
+                                </a>
+                            </span>
+                        </div>
+
+                        <div className={s.creditItem}>
+                            <span className={s.label}>Repositorio:</span>
+                            <span className={s.value}>
+                                <a
+                                    href="https://github.com/bbycroft/llm-viz"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    GitHub - llm-viz
+                                </a>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div className={s.divider} />
-
-        <div className={s.projectsSection}>
-            <div className={s.sectionTitle}>Bio</div>
-            <div className={s.bioText}>
-                <p>
-                    Born and raised in New Zealand, I've been writing code ever since I first got my hands on a computer.
-                    After my Bsc in Maths and Physics<span className={s.footnoteRef}>1</span>, I have been working professionally as a software engineer since 2013.
-                </p>
-                <p>
-                    Over my career I've touched a whole variety of tech, from CUDA programming to web development. On the way becoming well versed in
-                    embedded C, distributed system architecture, databases, cloud infrastructure, numerous algorithms, 3D graphics, and much more.
-                </p>
-                <p>
-                    I've always sought to bring high performance to the things I build, the feature that many can't articulate but everyone can feel.
-                    Computers are ridiculously fast, and there's often so much left on the table.
-                </p>
-                <p>
-                    I have a tendency to roll-my-own, which invariably pays off in the long run: I understand how things work, can debug and fix them
-                    easily, and ensure they're tailored and optimized to the problem at hand. I also err on
-                    the side of a data-oriented approach, as most abstractions are unnecessary, and simple functions get you a long way.
-                </p>
-                <div className={s.footnotes}>
-                    <div className={s.footnote}>1. BSc in Mathematics and Physics from the University of Canterbury in 2012</div>
-                </div>
-            </div>
-        </div>
-    </div>;
-}
+    );
+};
