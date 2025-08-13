@@ -779,11 +779,20 @@ Este proyecto está bajo la **Licencia MIT**. Ver [LICENSE](LICENSE) para más d
 - **Tailwind CSS** - Sistema de diseño
 - **Chart.js** - Visualizaciones de datos
 
-<div>
-    <h3>
-      📍 <strong>Ibagué, Tolima, Colombia</strong> 
-    </h3>
-  </div>
+<div align="center">
+  
+  <img src="https://github.com/felipesanchez-dev.png" width="200" height="200" style="border-radius: 50%; border: 6px solid #0066ff; box-shadow: 0 0 40px rgba(0, 102, 255, 0.6);" alt="Juan Felipe Reyes Sánchez" />
+  
+  # 🚀 Juan Felipe Reyes Sánchez
+  
+  <h2>
+    <strong>Software Engineer <br/> TypeScript, React & Next.js Specialist</strong>
+    <img src="https://emojis.slackmojis.com/emojis/images/1531849430/4246/blob-sunglasses.gif?1531849430" width="40"/>
+  </h2>
+  
+  
+  <!-- Animación de escritura principal -->
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=24&pause=1000&color=0066FF&center=true&vCenter=true&width=800&height=60&lines=Building+scalable+web+applications;Clean+Architecture+%26+SOLID+Principles;Full-Stack+Developer+%7C+Mobile+Dev;TypeScript+%26+React+Ecosystem+Expert;Always+learning%2C+always+growing+🚀" />
   
 </div>
 
