@@ -129,6 +129,45 @@ export const HomePage: React.FC = () => {
                         </div>
                     </div>
                 </div>
+
+                <div
+                    className={s.projectCard}
+                    onClick={() => window.open("https://github.com/felipesanchez-dev/LLMs", "_blank")}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) =>
+                        e.key === "Enter" || e.key === " "
+                            ? window.open("https://github.com/felipesanchez-dev/LLMs", "_blank")
+                            : null
+                    }
+                >
+                    <div className={s.cardImageWrapper}>
+                        <div className={s.cardImage}>
+                            <div className={s.githubIcon}>
+                                <FontAwesomeIcon icon={faGithub} size="3x" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={s.cardContent}>
+                        <div className={s.cardTitle}>
+                            <a 
+                                href="https://github.com/felipesanchez-dev/LLMs"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Código Fuente - Open Source {externalIcon()}
+                            </a>
+                        </div>
+                        <div className={s.cardText}>
+                            Accede al código fuente completo de este proyecto en GitHub. 
+                            Como un proyecto open source, puedes explorar la implementación, 
+                            contribuir con mejoras, reportar issues o hacer tu propio fork. 
+                            ¡La colaboración y transparencia son fundamentales para 
+                            democratizar el conocimiento en IA!
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div className={s.divider} />
@@ -161,34 +200,9 @@ export const HomePage: React.FC = () => {
                     <span className="font-bold">
                         Todos los creditos correspondientes
                     </span>
-                    <div
-                        className={s.creditsCard}
-                        aria-label="Reconocimientos del proyecto"
-                    >
-                        <div className={s.creditsTitle}>Reconocimientos</div>
-
-                        <div className={s.creditItem}>
-                            <span className={s.label}>
-                                Autor de la investigacion y modelo 3D:
-                            </span>
-                            <span className={s.value}>Brendan Bycroft</span>
-                        </div>
-
-                        <div className={s.creditItem}>
-                            <span className={s.label}>Repositorio:</span>
-                            <span className={s.value}>
-                                <a
-                                    href="https://github.com/bbycroft/llm-viz"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    GitHub - llm-viz
-                                </a>
-                            </span>
-                        </div>
+                    
                     </div>
                 </div>
             </div>
-        </div>
     );
 };

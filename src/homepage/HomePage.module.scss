@@ -221,8 +221,35 @@
     }
 }
 
+.githubIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(135deg, #24292e 0%, #1a1e22 100%);
+    color: white;
+    font-size: 2.5rem;
+    transition: all 0.3s ease;
+    border-radius: 8px 0 0 8px;
+    
+    @media (max-width: 500px) {
+        border-radius: 8px 8px 0 0;
+    }
+    
+    &:hover {
+        background: linear-gradient(135deg, #2f363d 0%, #24292e 100%);
+        transform: scale(1.02);
+    }
+}
+
 .projectCard:hover .cardImage img {
     transform: scale(1.04);
+}
+
+.projectCard:hover .githubIcon {
+    background: linear-gradient(135deg, #2f363d 0%, #24292e 100%);
+    transform: scale(1.02);
 }
 
 .cardContent {
