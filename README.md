@@ -24,7 +24,7 @@
   [![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
   
   <!-- Live Demo -->
-  [![Demo](https://img.shields.io/badge/🚀_Demo_Live-Ver_Proyecto-ff6b6b?style=for-the-badge)](https://llm-viz.vercel.app)
+  [![Demo](https://img.shields.io/badge/🚀_Demo_Live-Ver_Proyecto-ff6b6b?style=for-the-badge)](https://llms-mu.vercel.app)
   
 </div>
 
