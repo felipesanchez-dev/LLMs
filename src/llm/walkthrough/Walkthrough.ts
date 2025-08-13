@@ -85,7 +85,7 @@ export function initWalkthrough() {
         phaseTransitiveData: null as any,
         phaseList: [{
             groupId: PhaseGroup.Intro,
-            title: 'Introduction',
+            title: 'Introducción',
             phases: [
                 { id: Phase.Intro_Intro, title: 'Overview' },
                 { id: Phase.Intro_Prelim, title: 'Preliminary' },

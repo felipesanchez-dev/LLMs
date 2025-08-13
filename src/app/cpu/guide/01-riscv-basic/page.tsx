@@ -13,7 +13,7 @@ export const metadata = makeCpuMetadata(dir);
 export default function Page() {
     return <CpuEnabledGuide dir={dir}>
 
-        <GuideSection title={"Introduction"}>
+        <GuideSection title={"Introducción"}>
         <Para>
             In this guide we'll build a minimal RISC-V computer, building on a few pre-made components.
 
