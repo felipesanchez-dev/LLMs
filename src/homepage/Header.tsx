@@ -18,15 +18,6 @@ export const Header: React.FC<{
                 <Link className="hover:underline hover:text-blue-300 transition-colors" href={"/llm"}>
                     LLM Simulador
                 </Link>
-                <Link className="hover:underline hover:text-blue-300 transition-colors" href={"/llm-theory"}>
-                    LLM Teoría
-                </Link>
-                <Link className="hover:underline hover:text-blue-300 transition-colors" href={"/cpu/guide/01-riscv-basic"}>
-                    Guía RISC-V Básica
-                </Link>
-                <Link className="hover:underline hover:text-blue-300 transition-colors" href={"/fluid-sim"}>
-                    Simulación de Fluidos
-                </Link>
             </nav>
         </header>
     );
