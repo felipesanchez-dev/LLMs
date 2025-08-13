@@ -779,30 +779,25 @@ Este proyecto está bajo la **Licencia MIT**. Ver [LICENSE](LICENSE) para más d
 - **Tailwind CSS** - Sistema de diseño
 - **Chart.js** - Visualizaciones de datos
 
-### Adaptación al Español
+<div>
+    <h3>
+      📍 <strong>Ibagué, Tolima, Colombia</strong> 
+    </h3>
+  </div>
+  
+</div>
 
-**Felipe Reyes Sánchez** - Ingeniería de Software y Adaptación
-- Traducción completa al español
-- Mejoras en la experiencia de usuario
-- Documentación educativa expandida
-- Optimizaciones de rendimiento
+<!-- Badges profesionales destacados -->
+<div align="center">
+  
+  
+  [![Portfolio](https://img.shields.io/badge/🌍_Portfolio-felipesanchezdev.site-FF6B35?style=for-the-badge&logoColor=white&logo=firefox)](https://felipesanchezdev.site)
+  [![Email](https://img.shields.io/badge/📧_Email-jfelipe9.121@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:jfelipe9.121@gmail.com)
+  [![LinkedIn](https://img.shields.io/badge/💼_LinkedIn-felipereyessa-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/felipereyessa/)
+  [![GitHub](https://img.shields.io/badge/💻_GitHub-felipesanchez--dev-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/felipesanchez-dev)
+  [![WhatsApp](https://img.shields.io/badge/📱_WhatsApp-+57_310_245_2542-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/573102452542)
 
-## 🔗 Enlaces Útiles
-
-### Proyecto
-- **🌐 Demo en vivo**: [https://llm-viz.vercel.app](https://llm-viz.vercel.app)
-- **📧 Contacto**: jfelipe9.121@gmail.com
-- **💼 LinkedIn**: [Felipe Sánchez](https://linkedin.com/in/felipesanchez-dev)
-
-### Recursos Educativos
-- **📚 Attention Is All You Need**: [Paper original Transformer](https://arxiv.org/abs/1706.03762)
-- **🎓 The Illustrated Transformer**: [Guía visual](http://jalammar.github.io/illustrated-transformer/)
-- **📖 GPT Architecture**: [Documentación OpenAI](https://openai.com/research)
-
-### Tecnologías
-- **🔧 Next.js Docs**: [nextjs.org/docs](https://nextjs.org/docs)
-- **🎨 WebGL Tutorial**: [webgl2fundamentals.org](https://webgl2fundamentals.org/)
-- **⚡ WebGPU Spec**: [gpuweb.github.io](https://gpuweb.github.io/gpuweb/)
+</div>
 
 ---
 
