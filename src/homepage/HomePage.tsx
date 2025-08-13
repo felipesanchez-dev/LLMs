@@ -139,13 +139,13 @@ export const HomePage: React.FC = () => {
                 <div className={s.bioText}>
                     <p>
                         ¡Hola! Soy Felipe, un ingeniero de software dedicado a
-                        democratizar el conocimiento de la inteligencia
-                        artificial. Este sitio web está inspirado en el
-                        increíble trabajo open source de{" "}
+                        democratizar y divulgar el conocimiento de la
+                        inteligencia artificial. Este sitio web está inspirado
+                        en el increíble trabajo open source de{" "}
                         <span className="font-bold">Brendan Bycroft</span> y
                         representa mi compromiso con hacer que conceptos
-                        complejos de machine learning sean accesibles para la
-                        comunidad hispanohablante.
+                        complejos de los LLM sean accesibles para la comunidad
+                        hispanohablante.
                     </p>
 
                     <p>
@@ -158,7 +158,9 @@ export const HomePage: React.FC = () => {
                         explorar y entender la magia detrás de ChatGPT y
                         similares.
                     </p>
-
+                    <span className="font-bold">
+                        Todos los creditos correspondientes
+                    </span>
                     <div
                         className={s.creditsCard}
                         aria-label="Reconocimientos del proyecto"
@@ -166,21 +168,10 @@ export const HomePage: React.FC = () => {
                         <div className={s.creditsTitle}>Reconocimientos</div>
 
                         <div className={s.creditItem}>
-                            <span className={s.label}>Creador Original:</span>
-                            <span className={s.value}>Brendan Bycroft</span>
-                        </div>
-
-                        <div className={s.creditItem}>
-                            <span className={s.label}>Sitio Web Oficial:</span>
-                            <span className={s.value}>
-                                <a
-                                    href="https://bbycroft.net"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    bbycroft.net
-                                </a>
+                            <span className={s.label}>
+                                Autor de la investigacion y modelo 3D:
                             </span>
+                            <span className={s.value}>Brendan Bycroft</span>
                         </div>
 
                         <div className={s.creditItem}>

@@ -13,40 +13,40 @@ export function walkthrough09_Output(args: IWalkthroughArgs) {
 
     let c0 = commentary(wt, null, 0)`
 
-Finally, we come to the end of the model. The output of the final transformer block is passed through
-a layer normalization, and then we use a linear transformation (matrix multiplication), this time without a bias.
+Finalmente, llegamos al final del modelo. La salida del bloque transformer final se pasa a través
+de una normalización de capas, y luego usamos una transformación lineal (multiplicación de matrices), esta vez sin sesgo.
 
-This final transformation takes each of our column vectors from length C to length nvocab. Hence,
-it's effectively producing a score for each word in the vocabulary for each of our columns. These
-scores have a special name: logits.
+Esta transformación final toma cada uno de nuestros vectores columna de longitud C a longitud nvocab. Por lo tanto,
+efectivamente está produciendo una puntuación para cada palabra en el vocabulario para cada una de nuestras columnas. Estas
+puntuaciones tienen un nombre especial: logits.
 
-The name "logits" comes from "log-odds," i.e., the logarithm of the odds of each token. "Log" is
-used because the softmax we apply next does an exponentiation to convert to "odds" or probabilities.
+El nombre "logits" viene de "log-odds", es decir, el logaritmo de las probabilidades de cada token. "Log" se
+usa porque el softmax que aplicamos a continuación hace una exponenciación para convertir a "probabilidades" o probabilidades.
 
-To convert these scores into nice probabilities, we pass them through a softmax operation. Now, for
-each column, we have a probability the model assigns to each word in the vocabulary.
+Para convertir estas puntuaciones en probabilidades agradables, las pasamos a través de una operación softmax. Ahora, para
+cada columna, tenemos una probabilidad que el modelo asigna a cada palabra en el vocabulario.
 
-In this particular model, it has effectively learned all the answers to the question of how to sort
-three letters, so the probabilities are heavily weighted toward the correct answer.
+En este modelo particular, efectivamente ha aprendido todas las respuestas a la pregunta de cómo ordenar
+tres letras, por lo que las probabilidades están fuertemente sesgadas hacia la respuesta correcta.
 
-When we're stepping the model through time, we use the last column's probabilities to determine the
-next token to add to the sequence. For example, if we've supplied six tokens into the model, we'll
-use the output probabilities of the 6th column.
+Cuando estamos haciendo que el modelo avance a través del tiempo, usamos las probabilidades de la última columna para determinar el
+siguiente token a añadir a la secuencia. Por ejemplo, si hemos suministrado seis tokens al modelo,
+usaremos las probabilidades de salida de la 6ª columna.
 
-This column's output is a series of probabilities, and we actually have to pick one of them to use
-as the next in the sequence. We do this by "sampling from the distribution." That is, we randomly
-choose a token, weighted by its probability. For example, a token with a probability of 0.9 will be
-chosen 90% of the time.
+La salida de esta columna es una serie de probabilidades, y en realidad tenemos que elegir una de ellas para usar
+como la siguiente en la secuencia. Hacemos esto "muestreando de la distribución". Es decir, elegimos aleatoriamente
+un token, ponderado por su probabilidad. Por ejemplo, un token con una probabilidad de 0.9 será
+elegido el 90% del tiempo.
 
-There are other options here, however, such as always choosing the token with the highest probability.
+Sin embargo, hay otras opciones aquí, como siempre elegir el token con la probabilidad más alta.
 
-We can also control the "smoothness" of the distribution by using a temperature parameter. A higher
-temperature will make the distribution more uniform, and a lower temperature will make it more
-concentrated on the highest probability tokens.
+También podemos controlar la "suavidad" de la distribución usando un parámetro de temperatura. Una temperatura más alta
+hará que la distribución sea más uniforme, y una temperatura más baja la hará más
+concentrada en los tokens de mayor probabilidad.
 
-We do this by dividing the logits (the output of the linear transformation) by the temperature before
-applying the softmax. Since the exponentiation in the softmax has a large effect on larger numbers,
-making them all closer together will reduce this effect.
+Hacemos esto dividiendo los logits (la salida de la transformación lineal) por la temperatura antes de
+aplicar el softmax. Dado que la exponenciación en el softmax tiene un gran efecto en números más grandes,
+hacer que todos estén más cerca juntos reducirá este efecto.
 `;
 
 }

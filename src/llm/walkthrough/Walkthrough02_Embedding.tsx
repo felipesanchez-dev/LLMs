@@ -6,26 +6,54 @@ import { lerp } from "@/src/utils/math";
 import { Mat4f } from "@/src/utils/matrix";
 import { Dim, Vec3, Vec4 } from "@/src/utils/vector";
 import { Phase } from "./Walkthrough";
-import { commentary, DimStyle, IWalkthroughArgs, moveCameraTo, setInitialCamera } from "./WalkthroughTools";
+import {
+    commentary,
+    DimStyle,
+    IWalkthroughArgs,
+    moveCameraTo,
+    setInitialCamera,
+} from "./WalkthroughTools";
 import { processUpTo, startProcessBefore } from "./Walkthrough00_Intro";
 
 export function walkthrough02_Embedding(args: IWalkthroughArgs) {
-    let { walkthrough: wt, state, tools: { c_str, c_blockRef, c_dimRef, afterTime, cleanup, breakAfter }, layout } = args;
+    let {
+        walkthrough: wt,
+        state,
+        tools: { c_str, c_blockRef, c_dimRef, afterTime, cleanup, breakAfter },
+        layout,
+    } = args;
     let render = state.render;
 
     if (wt.phase !== Phase.Input_Detail_Embedding) {
         return;
     }
 
-    setInitialCamera(state, new Vec3(15.654, 0.000, -80.905), new Vec3(287.000, 14.500, 3.199));
-    wt.dimHighlightBlocks = [layout.idxObj, layout.tokEmbedObj, layout.posEmbedObj, layout.residual0];
+    setInitialCamera(
+        state,
+        new Vec3(15.654, 0.0, -80.905),
+        new Vec3(287.0, 14.5, 3.199)
+    );
+    wt.dimHighlightBlocks = [
+        layout.idxObj,
+        layout.tokEmbedObj,
+        layout.posEmbedObj,
+        layout.residual0,
+    ];
 
     commentary(wt)`
-We saw previously how the tokens are mapped to a sequence of integers using a simple lookup table.
-These integers, the ${c_blockRef('_token indices_', state.layout.idxObj, DimStyle.TokenIdx)}, are the first and only time we see integers in the model.
-From here on out, we're using floats (decimal numbers).
+        Anteriormente vimos cómo los *tokens* se mapean a una secuencia de enteros usando una simple tabla de búsqueda.
+        Estos enteros, los ${c_blockRef(
+            "_índices de tokens_",
+            state.layout.idxObj,
+            DimStyle.TokenIdx
+        )}, son la primera y única vez que vemos enteros en el modelo.
+        A partir de aquí, usamos números de punto flotante (números decimales).
 
-Let's take a look at how the 4th token (index 3) is used to generate the 4th column vector of our ${c_blockRef('_input embedding_', state.layout.residual0)}.`;
+        Veamos cómo el 4º *token* (índice 3) se usa para generar la 4ª columna vectorial de nuestra ${c_blockRef(
+            "_incrustación de entrada_",
+            state.layout.residual0
+        )}.
+        `;
     breakAfter();
 
     let t_moveCamera = afterTime(null, 1.0);
@@ -34,10 +62,22 @@ Let's take a look at how the 4th token (index 3) is used to generate the 4th col
     breakAfter();
 
     commentary(wt)`
-We use the token index (in this case ${c_str('B', DimStyle.Token)} = ${c_dimRef('1', DimStyle.TokenIdx)}) to select the 2nd column of the ${c_blockRef('_token embedding matrix_', state.layout.tokEmbedObj)} on the left.
-Note we're using 0-based indexing here, so the first column is at index 0.
+    Usamos el índice del *token* (en este caso ${c_str(
+        "B",
+        DimStyle.Token
+    )} = ${c_dimRef(
+        "1",
+        DimStyle.TokenIdx
+    )}) para seleccionar la 2ª columna de la ${c_blockRef(
+        "_matriz de incrustación de tokens_",
+        state.layout.tokEmbedObj
+    )} que está a la izquierda.
+    Nota que estamos usando indexación basada en 0, por lo que la primera columna está en el índice 0.
 
-This produces a column vector of size ${c_dimRef('_C_ = 48', DimStyle.C)}, which we describe as the token embedding.
+    Esto produce un vector columna de tamaño ${c_dimRef(
+        "_C_ = 48",
+        DimStyle.C
+    )}, que describimos como la *incrustación de token*.
     `;
     breakAfter();
 
@@ -47,9 +87,21 @@ This produces a column vector of size ${c_dimRef('_C_ = 48', DimStyle.C)}, which
     breakAfter();
 
     commentary(wt)`
-And since we're looking at our token ${c_str('B', DimStyle.Token)} in the 4th _position_ (t = ${c_dimRef('3', DimStyle.T)}), we'll take the 4th column of the ${c_blockRef('_position embedding matrix_', state.layout.posEmbedObj)}.
+    Y dado que estamos observando nuestro *token* ${c_str(
+        "B",
+        DimStyle.Token
+    )} en la 4ª _posición_ (t = ${c_dimRef(
+        "3",
+        DimStyle.T
+    )}), tomaremos la 4ª columna de la ${c_blockRef(
+        "_matriz de incrustación de posición_",
+        state.layout.posEmbedObj
+    )}.
 
-This also produces a column vector of size ${c_dimRef('_C_ = 48', DimStyle.C)}, which we describe as the position embedding.
+    Esto también produce un vector columna de tamaño ${c_dimRef(
+        "_C_ = 48",
+        DimStyle.C
+    )}, que describimos como la *incrustación de posición*.
     `;
     breakAfter();
 
@@ -58,10 +110,13 @@ This also produces a column vector of size ${c_dimRef('_C_ = 48', DimStyle.C)}, 
     breakAfter();
 
     commentary(wt)`
-Note that both of these position and token embeddings are learned during training (indicated by their blue color).
+    Ten en cuenta que tanto las incrustaciones de posición como las de tokens se aprenden durante el entrenamiento (indicado por su color azul).
 
-Now that we have these two column vectors, we simply add them together to produce another column vector of size ${c_dimRef('_C_ = 48', DimStyle.C)}.
-`;
+    Ahora que tenemos estos dos vectores columna, simplemente los sumamos para producir otro vector columna de tamaño ${c_dimRef(
+        "_C_ = 48",
+        DimStyle.C
+    )}.
+    `;
 
     breakAfter();
 
@@ -76,9 +131,8 @@ Now that we have these two column vectors, we simply add them together to produc
     breakAfter();
 
     commentary(wt)`
-We now run this same process for all of the tokens in the input sequence, creating a set of vectors which incorporate both the token values and their positions.
-
-`;
+    Ahora ejecutamos este mismo proceso para todos los *tokens* en la secuencia de entrada, creando un conjunto de vectores que incorporan tanto los valores de los *tokens* como sus posiciones.
+    `;
 
     breakAfter();
 
@@ -87,52 +141,114 @@ We now run this same process for all of the tokens in the input sequence, creati
     breakAfter();
 
     commentary(wt)`
-Feel free to hover over individual cells on the ${c_blockRef('_input embedding_', state.layout.residual0)} matrix to see the computations and their sources.
+    Puedes pasar el cursor sobre las celdas individuales en la matriz ${c_blockRef(
+        "_incrustación de entrada_",
+        state.layout.residual0
+    )} para ver los cálculos y sus orígenes.
 
-We see that running this process for all the tokens in the input sequence produces a matrix of size ${c_dimRef('_T_', DimStyle.T)} x ${c_dimRef('_C_', DimStyle.C)}.
-The ${c_dimRef('_T_', DimStyle.T)} stands for ${c_dimRef('_time_', DimStyle.T)}, i.e., you can think of tokens later in the sequence as later in time.
-The ${c_dimRef('_C_', DimStyle.C)} stands for ${c_dimRef('_channel_', DimStyle.C)}, but is also referred to as "feature" or "dimension" or "embedding size". This length, ${c_dimRef('_C_', DimStyle.C)},
-is one of the several "hyperparameters" of the model, and is chosen by the designer to in a tradeoff between model size and performance.
+    Vemos que ejecutar este proceso para todos los *tokens* en la secuencia de entrada produce una matriz de tamaño ${c_dimRef(
+        "_T_",
+        DimStyle.T
+    )} x ${c_dimRef("_C_", DimStyle.C)}.
+    El ${c_dimRef("_T_", DimStyle.T)} significa ${c_dimRef(
+        "_tiempo_",
+        DimStyle.T
+    )}, es decir, puedes pensar que los *tokens* más adelante en la secuencia están más adelante en el tiempo.
+    El ${c_dimRef("_C_", DimStyle.C)} significa ${c_dimRef(
+        "_canal_",
+        DimStyle.C
+    )}, pero también se le conoce como “característica”, “dimensión” o “tamaño de incrustación”.
+    Esta longitud, ${c_dimRef(
+        "_C_",
+        DimStyle.C
+    )}, es uno de los varios “hiperparámetros” del modelo y es elegida por el diseñador como un equilibrio entre el tamaño del modelo y su rendimiento.
 
-This matrix, which we'll refer to as the ${c_blockRef('_input embedding_', state.layout.residual0)} is now ready to be passed down through the model.
-This collection of ${c_dimRef('T', DimStyle.T)} columns each of length ${c_dimRef('C', DimStyle.C)} will become a familiar sight throughout this guide.
-`;
+    Esta matriz, a la que nos referiremos como la ${c_blockRef(
+        "_incrustación de entrada_",
+        state.layout.residual0
+    )}, ahora está lista para pasar a través del modelo.
+    Esta colección de ${c_dimRef(
+        "T",
+        DimStyle.T
+    )} columnas, cada una de longitud ${c_dimRef(
+        "C",
+        DimStyle.C
+    )}, se convertirá en una vista familiar a lo largo de esta guía.
+    `;
 
-    cleanup(t9_cleanupInstant, [t3_moveTokenEmbed, t5_movePosEmbed, t6_plusSymAnim, t7_addAnim, t8_placeAnim]);
-    cleanup(t10_fadeAnim, [t0_splitEmbedAnim, t1_fadeEmbedAnim, t2_highlightTokenEmbed, t4_highlightPosEmbed]);
+    cleanup(t9_cleanupInstant, [
+        t3_moveTokenEmbed,
+        t5_movePosEmbed,
+        t6_plusSymAnim,
+        t7_addAnim,
+        t8_placeAnim,
+    ]);
+    cleanup(t10_fadeAnim, [
+        t0_splitEmbedAnim,
+        t1_fadeEmbedAnim,
+        t2_highlightTokenEmbed,
+        t4_highlightPosEmbed,
+    ]);
 
-    moveCameraTo(state, t_moveCamera, new Vec3(7.6, 0, -33.1), new Vec3(290, 15.5, 0.8));
+    moveCameraTo(
+        state,
+        t_moveCamera,
+        new Vec3(7.6, 0, -33.1),
+        new Vec3(290, 15.5, 0.8)
+    );
 
     let residCol: IBlkDef = null!;
     let exampleIdx = 3;
-    if ((t0_splitEmbedAnim.t > 0.0 || t10_fadeAnim.t > 0.0) && t11_fillRest.t === 0) {
-        splitGrid(layout, layout.idxObj, Dim.X, exampleIdx + 0.5, t0_splitEmbedAnim.t * 4.0);
+    if (
+        (t0_splitEmbedAnim.t > 0.0 || t10_fadeAnim.t > 0.0) &&
+        t11_fillRest.t === 0
+    ) {
+        splitGrid(
+            layout,
+            layout.idxObj,
+            Dim.X,
+            exampleIdx + 0.5,
+            t0_splitEmbedAnim.t * 4.0
+        );
 
         layout.residual0.access!.disable = true;
         layout.residual0.opacity = lerp(1.0, 0.1, t1_fadeEmbedAnim.t);
 
-        residCol = splitGrid(layout, layout.residual0, Dim.X, exampleIdx + 0.5, t0_splitEmbedAnim.t * 4.0)!;
+        residCol = splitGrid(
+            layout,
+            layout.residual0,
+            Dim.X,
+            exampleIdx + 0.5,
+            t0_splitEmbedAnim.t * 4.0
+        )!;
         residCol.highlight = 0.3;
 
         residCol.opacity = lerp(1.0, 0.0, t1_fadeEmbedAnim.t);
-
     }
 
-    let tokValue = getBlockValueAtIdx(layout.idxObj, new Vec3(exampleIdx, 0, 0)) ?? 1;
-
+    let tokValue =
+        getBlockValueAtIdx(layout.idxObj, new Vec3(exampleIdx, 0, 0)) ?? 1;
 
     let tokColDupe: IBlkDef | null = null;
     let posColDupe: IBlkDef | null = null;
 
     if (t2_highlightTokenEmbed.t > 0.0) {
-        let tokEmbedCol = splitGrid(layout, layout.tokEmbedObj, Dim.X, tokValue + 0.5, t2_highlightTokenEmbed.t * 4.0)!;
+        let tokEmbedCol = splitGrid(
+            layout,
+            layout.tokEmbedObj,
+            Dim.X,
+            tokValue + 0.5,
+            t2_highlightTokenEmbed.t * 4.0
+        )!;
 
         tokColDupe = duplicateGrid(layout, tokEmbedCol);
-        tokColDupe.t = 'i';
+        tokColDupe.t = "i";
         tokEmbedCol.highlight = 0.3;
 
         let startPos = new Vec3(tokEmbedCol.x, tokEmbedCol.y, tokEmbedCol.z);
-        let targetPos = new Vec3(residCol.x, residCol.y, residCol.z).add(new Vec3(-2.0, 0, 3.0));
+        let targetPos = new Vec3(residCol.x, residCol.y, residCol.z).add(
+            new Vec3(-2.0, 0, 3.0)
+        );
 
         let pos = startPos.lerp(targetPos, t3_moveTokenEmbed.t);
 
@@ -141,16 +257,23 @@ This collection of ${c_dimRef('T', DimStyle.T)} columns each of length ${c_dimRe
         tokColDupe.z = pos.z;
     }
 
-
     if (t4_highlightPosEmbed.t > 0.0) {
-        let posEmbedCol = splitGrid(layout, layout.posEmbedObj, Dim.X, exampleIdx + 0.5, t4_highlightPosEmbed.t * 4.0)!;
+        let posEmbedCol = splitGrid(
+            layout,
+            layout.posEmbedObj,
+            Dim.X,
+            exampleIdx + 0.5,
+            t4_highlightPosEmbed.t * 4.0
+        )!;
 
         posColDupe = duplicateGrid(layout, posEmbedCol);
-        posColDupe.t = 'i';
+        posColDupe.t = "i";
         posEmbedCol.highlight = 0.3;
 
         let startPos = new Vec3(posEmbedCol.x, posEmbedCol.y, posEmbedCol.z);
-        let targetPos = new Vec3(residCol.x, residCol.y, residCol.z).add(new Vec3(2.0, 0, 3.0));
+        let targetPos = new Vec3(residCol.x, residCol.y, residCol.z).add(
+            new Vec3(2.0, 0, 3.0)
+        );
 
         let pos = startPos.lerp(targetPos, t5_movePosEmbed.t);
 
@@ -159,24 +282,42 @@ This collection of ${c_dimRef('T', DimStyle.T)} columns each of length ${c_dimRe
         posColDupe.z = pos.z;
     }
 
-    if (t6_plusSymAnim.t > 0.0 && tokColDupe && posColDupe && t7_addAnim.t < 1.0) {
+    if (
+        t6_plusSymAnim.t > 0.0 &&
+        tokColDupe &&
+        posColDupe &&
+        t7_addAnim.t < 1.0
+    ) {
         for (let c = 0; c < layout.shape.C; c++) {
             let plusCenter = new Vec3(
                 (tokColDupe.x + tokColDupe.dx + posColDupe.x) / 2,
                 tokColDupe.y + layout.cell * (c + 0.5),
-                tokColDupe.z + tokColDupe.dz / 2);
+                tokColDupe.z + tokColDupe.dz / 2
+            );
 
             let isActive = t6_plusSymAnim.t > (c + 1) / layout.shape.C;
             let opacity = lerp(0.0, 1.0, isActive ? 1 : 0);
 
-            let fontOpts: IFontOpts = { color: new Vec4(0, 0, 0, 1).mul(opacity), size: 1.5, mtx: Mat4f.fromTranslation(plusCenter) };
-            let w = measureText(render.modelFontBuf, '+', fontOpts);
+            let fontOpts: IFontOpts = {
+                color: new Vec4(0, 0, 0, 1).mul(opacity),
+                size: 1.5,
+                mtx: Mat4f.fromTranslation(plusCenter),
+            };
+            let w = measureText(render.modelFontBuf, "+", fontOpts);
 
-            drawText(render.modelFontBuf, '+', -w/2, -fontOpts.size/2, fontOpts);
+            drawText(
+                render.modelFontBuf,
+                "+",
+                -w / 2,
+                -fontOpts.size / 2,
+                fontOpts
+            );
         }
     }
 
-    let origResidPos = residCol ? new Vec3(residCol.x, residCol.y, residCol.z) : new Vec3();
+    let origResidPos = residCol
+        ? new Vec3(residCol.x, residCol.y, residCol.z)
+        : new Vec3();
     let offsetResidPos = origResidPos.add(new Vec3(0.0, 0, 3.0));
 
     if (t7_addAnim.t > 0.0 && tokColDupe && posColDupe) {

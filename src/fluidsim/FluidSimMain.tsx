@@ -1,11 +1,24 @@
+/**
+ * SIMULACIÓN DE FLUIDOS 2D - IMPLEMENTACIÓN DE ECUACIONES DE NAVIER-STOKES
+ * 
+ * Este sistema simula dinámicas de fluidos en 2D usando un enfoque de diferencias finitas.
+ * La simulación incluye:
+ * 
+ * 1. ADVECCIÓN: Cómo las propiedades del fluido se mueven con la velocidad
+ * 2. DIFUSIÓN: Cómo las propiedades se esparcen por viscosidad y conducción térmica
+ * 3. PROYECCIÓN: Garantiza que el campo de velocidad sea libre de divergencia (incompresible)
+ * 
+ * Cada celda almacena: [temperatura, densidad, velocidad_x, velocidad_y]
+ */
+
 'use client';
 
 import { PerlinNoise2D } from './PerlinNoise';
 
 export interface IFluidSimState {
-    running: boolean;
-    sim: IFluidSim;
-    canvasTemp: HTMLCanvasElement;
+    running: boolean;          // ¿Está la simulación ejecutándose?
+    sim: IFluidSim;           // Estado actual de la simulación
+    canvasTemp: HTMLCanvasElement; // Canvas temporal para renderizado
 }
 
 export interface ICanvasTargetDef {
@@ -14,20 +27,22 @@ export interface ICanvasTargetDef {
 }
 
 export interface IFluidSim {
-    width: number;
-    height: number;
-    numPressureIterations: number;
-    cells: Float32Array; // 2d array of floats, with values for (temperature, density, velocityX, velocityY)
+    width: number;            // Ancho de la grilla en celdas
+    height: number;           // Alto de la grilla en celdas
+    numPressureIterations: number; // Iteraciones para resolver presión
+    
+    // Arrays principales de datos del fluido
+    cells: Float32Array;      // Estado actual: [temp, densidad, vel_x, vel_y] por celda
+    cells2: Float32Array;     // Buffer temporal para cálculos
+    cells3: Float32Array;     // Otro buffer temporal
+    
+    // Arrays para resolver presión (proyección)
+    pressure0: Float32Array;  // Campo de presión actual
+    pressure1: Float32Array;  // Campo de presión temporal
+    divergence0: Float32Array; // Divergencia inicial del campo de velocidad
+    divergence1: Float32Array; // Divergencia después de proyección (debe ser ~0)
 
-    cells2: Float32Array;
-    cells3: Float32Array;
-
-    pressure0: Float32Array;
-    pressure1: Float32Array;
-    divergence0: Float32Array;
-    divergence1: Float32Array;
-
-    cellSize: number;
+    cellSize: number;         // Tamaño físico de cada celda en metros
 
     aggregates: ISimAggregates | null;
 

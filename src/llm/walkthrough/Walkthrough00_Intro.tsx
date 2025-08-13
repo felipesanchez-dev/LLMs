@@ -1,6 +1,5 @@
 import { IWalkthrough, Phase } from "./Walkthrough";
 import {
-    Colors,
     commentary,
     DimStyle,
     dimStyleColor,
@@ -49,12 +48,12 @@ export function walkthroughIntro(args: IWalkthroughArgs) {
         null,
         0
     )`Bienvenido al recorrido por el modelo de lenguaje grande GPT.
-Aquí exploraremos el modelo nano-gpt, con apenas 85,000 parámetros.
+    Aquí exploraremos el modelo nano-gpt, con apenas 85,000 parámetros.
 
-Su objetivo es simple: tomar una secuencia de seis letras: ${embed(
+    Su objetivo es simple: tomar una secuencia de seis letras: ${embed(
         ExampleInputOutput
     )}
-y ordenarlas en orden alfabético, es decir, convertirla en "ABBBCC".`;
+    y ordenarlas en orden alfabético, es decir, convertirla en "ABBBCC".`;
 
     if (c0.t > 0) {
         for (let cube of layout.cubes) {
@@ -153,10 +152,10 @@ y ordenarlas en orden alfabético, es decir, convertirla en "ABBBCC".`;
 
     let c5 = commentary(
         wt
-    )`In the 3d view, each green cell represents a number being processed, and each blue cell is a weight. ${embed(
+    )`En la vista 3D, cada celda verde representa un número que se está procesando, y cada celda azul es un peso. ${embed(
         GreenBlueCells
     )}
-    Each number in the sequence first gets turned into a 48 element vector (a size chosen for this particular model). This is called an _embedding_.`;
+    Cada número de la secuencia primero se convierte en un vector de 48 elementos (un tamaño elegido para este modelo en particular). A esto se le llama una *incrustación* o *embedding*.`;
     breakAfter(c5);
 
     {
@@ -209,7 +208,7 @@ y ordenarlas en orden alfabético, es decir, convertirla en "ABBBCC".`;
     breakAfter();
     commentary(
         wt
-    )`The embedding is then passed through the model, going through a series of layers, called transformers, before reaching the bottom.`;
+    )`La incrustación (embedding) se pasa luego a través del modelo, atravesando una serie de capas llamadas transformers, antes de llegar a la parte inferior.`;
     breakAfter();
 
     {
@@ -257,11 +256,6 @@ y ordenarlas en orden alfabético, es decir, convertirla en "ABBBCC".`;
         let t_fullFrameWalk = afterTime(null, 5.0, 0.5);
         processUpTo(state, t_fullFrameWalk, layout.ln_f.lnResid, processState);
 
-        // let t_endFrame = afterTime(null, 1.0, 0.5);
-        // moveCameraTo(state, t_endFrame, new Vec3(-18.3, 0, -1576), new Vec3(280.6, 9.7, 1.9));
-        // let t_endFrameWalk = afterTime(null, 2.0, 0.5);
-        // processUpTo(state, t_endFrameWalk, layout.ln_f.lnResid, processState);
-
         let t_output = afterTime(null, 1.0, 0.5);
         moveCameraTo(
             state,
@@ -269,7 +263,6 @@ y ordenarlas en orden alfabético, es decir, convertirla en "ABBBCC".`;
             new Vec3(-58.4, 0, -1654.9),
             new Vec3(271.3, 6.4, 1.1)
         );
-        // moveCameraTo(state, t_output, new Vec3(-53.9, 0, -1654.1), new Vec3(270.9, 6.2, 1.1));
         let t_outputWalk = afterTime(null, 2.0, 0.5);
         processUpTo(state, t_outputWalk, layout.logitsSoftmax, processState);
 
@@ -285,7 +278,6 @@ y ordenarlas en orden alfabético, es decir, convertirla en "ABBBCC".`;
                 }
             }
 
-            // state.display.lines.push(arr.map(a => a.toFixed(2).padStart(4)).join(', '));
             state.display.tokenOutputColors = {
                 color1: new Vec4(0, 0, 0, 0),
                 color2: Vec4.fromHexColor("#000", 1),
@@ -296,13 +288,15 @@ y ordenarlas en orden alfabético, es decir, convertirla en "ABBBCC".`;
 
     commentary(
         wt
-    )`So what's the output? A prediction of the next token in the sequence. So at the 6th entry, we get probabilities that the next token is
-        going to be 'A', 'B', or 'C'.`;
+    )`Entonces, ¿cuál es la salida?
+    Una predicción del siguiente *token* en la secuencia.
+    Así, en la sexta entrada, obtenemos probabilidades de que el próximo *token* sea "A", "B" o "C".
+    `;
 
     commentary(
         wt
-    )`In this case, the model is pretty sure it's going to be 'A'. Now, we can feed this prediction back into the top of the model, and repeat
-    the entire process.`;
+    )`En este caso, el modelo está bastante seguro de que será 'A'. Ahora, podemos alimentar esta predicción de nuevo en la parte superior del modelo y repetir
+    todo el proceso.`;
 
     breakAfter();
 }
@@ -333,8 +327,6 @@ export function processUpTo(
     let firstIdx = prevInfo ? prevInfo.lastBlockIdx + 1 : 0;
     let lastIdx = activeBlocks.indexOf(block);
 
-    // we weight the time on each block by the number of cells in the block, times by how many dependent cells it has
-    // although to make this less extreme, we take a fractional power of this
     let cellCounts = activeBlocks
         .filter((_, i) => i >= firstIdx && i <= lastIdx)
         .map((a) => a.cx * a.cy * Math.pow(a.deps?.dotLen ?? 1, 0.25));
@@ -355,7 +347,6 @@ export function processUpTo(
 
     let blk = activeBlocks[currIdx];
 
-    // default, but switched for attention matrix
     let dim0 = Dim.X;
     let dim1 = Dim.Y;
     if (blk.transpose) {
@@ -374,7 +365,7 @@ export function processUpTo(
 
     let blockPos = new Vec3()
         .withSetAt(dim0, horizIdx)
-        .withSetAt(dim1, vertIdx); // new Vec3(horizIdx, vertIdx, 0);
+        .withSetAt(dim1, vertIdx); 
     let pinPos = new Vec3(Math.floor(cx / 2), 0, 0);
 
     if (blk === state.layout.residual0) {

@@ -128,19 +128,20 @@ export const TocDiagram: React.FC<{
         entryGroups[entryGroups.length - 1].entries.push(entry);
     }
 
-    entryGroups.push({ groupName: 'Intro', entries: [] });
-    makeEntry(Phase.Intro_Intro, 'Introduccion', []);
-    makeEntry(Phase.Intro_Prelim, 'Preliminares', []);
+  entryGroups.push({ groupName: 'Introducción', entries: [] });
+makeEntry(Phase.Intro_Intro, 'Introducción', []);
+makeEntry(Phase.Intro_Prelim, 'Preliminares', []);
 
-    entryGroups.push({ groupName: 'Components', entries: [] });
-    makeEntry(Phase.Input_Detail_Embedding, 'Embedding', ['tokEmbed', 'posEmbed'], true);
-    makeEntry(Phase.Input_Detail_LayerNorm, 'Layer Norm', ['ln1', 'ln2', 'lnf']);
-    makeEntry(Phase.Input_Detail_SelfAttention, 'Self Attention', ['selfAttend']);
-    makeEntry(Phase.Input_Detail_Projection, 'Projection', ['selfAttend']);
-    makeEntry(Phase.Input_Detail_Mlp, 'MLP', ['feedForward']);
-    makeEntry(Phase.Input_Detail_Transformer, 'Transformer', ['transformer']);
-    makeEntry(Phase.Input_Detail_Softmax, 'Softmax', ['softmaxOut']);
-    makeEntry(Phase.Input_Detail_Output, 'Output', ['lnf', 'linear', 'softmaxOut'], true);
+entryGroups.push({ groupName: 'Componentes', entries: [] });
+makeEntry(Phase.Input_Detail_Embedding, 'Incrustación (Embedding)', ['tokEmbed', 'posEmbed'], true);
+makeEntry(Phase.Input_Detail_LayerNorm, 'Normalización por Capas (Layer Norm)', ['ln1', 'ln2', 'lnf']);
+makeEntry(Phase.Input_Detail_SelfAttention, 'Autoatención (Self Attention)', ['selfAttend']);
+makeEntry(Phase.Input_Detail_Projection, 'Proyección', ['selfAttend']);
+makeEntry(Phase.Input_Detail_Mlp, 'Perceptrón Multicapa (MLP)', ['feedForward']);
+makeEntry(Phase.Input_Detail_Transformer, 'Transformador (Transformer)', ['transformer']);
+makeEntry(Phase.Input_Detail_Softmax, 'Función Softmax', ['softmaxOut']);
+makeEntry(Phase.Input_Detail_Output, 'Salida', ['lnf', 'linear', 'softmaxOut'], true);
+
 
     function calcSizes(el: IEl): void {
         el.padX = el.padX ?? 0;

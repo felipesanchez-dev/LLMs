@@ -1,9 +1,25 @@
-import { faArrowDown, faArrowLeft, faArrowRight, faArrowUp, faCircleDot, faExpand, faMagnifyingGlassMinus, faMagnifyingGlassPlus, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import {
+    faArrowDown,
+    faArrowLeft,
+    faArrowRight,
+    faArrowUp,
+    faCircleDot,
+    faExpand,
+    faMagnifyingGlassMinus,
+    faMagnifyingGlassPlus,
+    IconDefinition,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import React, { useState } from "react";
 import { ICameraPos } from "../Camera";
-import { getBlkDimensions, IBlkDef, IBlkLabel, IGptLayerNormLayout, IGptModelLayout } from "../GptModelLayout";
+import {
+    getBlkDimensions,
+    IBlkDef,
+    IBlkLabel,
+    IGptLayerNormLayout,
+    IGptModelLayout,
+} from "../GptModelLayout";
 import { IProgramState } from "../Program";
 import { IRenderView } from "../render/modelRender";
 import { useProgramState } from "../Sidebar";
@@ -11,7 +27,7 @@ import { clamp, isNotNil } from "@/src/utils/data";
 import { lerp } from "@/src/utils/math";
 import { useTouchEvents } from "@/src/utils/pointer";
 import { BoundingBox3d, Vec3 } from "@/src/utils/vector";
-import s from './MovementControls.module.scss';
+import s from "./MovementControls.module.scss";
 
 export interface ICameraLerp {
     camInitial: ICameraPos;
@@ -110,7 +126,15 @@ export interface INavLevel {
     down?: INavLevel;
 }
 
-export function getCurrentNavLevel(state: IProgramState, navLevels: INavLevel): { level: INavLevel, parent: INavLevel | null, depth: number, parents: INavLevel[] } | null {
+export function getCurrentNavLevel(
+    state: IProgramState,
+    navLevels: INavLevel
+): {
+    level: INavLevel;
+    parent: INavLevel | null;
+    depth: number;
+    parents: INavLevel[];
+} | null {
     let target = state.movement.target;
     let targetDepth = state.movement.depth;
 
@@ -144,10 +168,14 @@ export function getCurrentNavLevel(state: IProgramState, navLevels: INavLevel): 
 export function manageMovement(state: IProgramState, view: IRenderView) {
     let navLevels = constructNavLevels(state.layout);
 
-    let current = getCurrentNavLevel(state, navLevels) ?? { level: navLevels, parent: null, depth: 0, parents: [] };
+    let current = getCurrentNavLevel(state, navLevels) ?? {
+        level: navLevels,
+        parent: null,
+        depth: 0,
+        parents: [],
+    };
     let mvmt = state.movement;
     if (isNotNil(mvmt.action)) {
-
     }
 
     mvmt.depth = current.depth;
@@ -167,7 +195,7 @@ export function manageMovement(state: IProgramState, view: IRenderView) {
             if (mvmt.target.length > depth + 1) {
                 mvmt.target = state.movement.target.slice(0, depth + 1);
             }
-        }
+        };
 
         let setChild = (child: INavLevel | undefined) => {
             if (child && current.parent) {
@@ -213,20 +241,28 @@ export function manageMovement(state: IProgramState, view: IRenderView) {
 
         state.markDirty();
 
-        current = getCurrentNavLevel(state, navLevels) ?? { level: navLevels, parent: null, depth: 0, parents: [] };
+        current = getCurrentNavLevel(state, navLevels) ?? {
+            level: navLevels,
+            parent: null,
+            depth: 0,
+            parents: [],
+        };
 
         if (current.level !== prevLevel || action === MovementAction.Focus) {
             // capture camera position and store as lerp start
 
-            let zoomLevel = [...current.parents, current.level].find(a => a.zoomLimit) ?? current.level;
+            let zoomLevel =
+                [...current.parents, current.level].find((a) => a.zoomLimit) ??
+                current.level;
 
             let boxToViewMtx = state.camera.modelMtx;
             let bb = new BoundingBox3d();
             iterNavLevels(zoomLevel, (level) => {
                 if (level.block) {
                     let pos = getBlkDimensions(level.block);
-                    bb.addInPlace(boxToViewMtx.mulVec3Proj(pos.tl))
-                        .addInPlace(boxToViewMtx.mulVec3Proj(pos.br));
+                    bb.addInPlace(boxToViewMtx.mulVec3Proj(pos.tl)).addInPlace(
+                        boxToViewMtx.mulVec3Proj(pos.br)
+                    );
                 }
             });
 
@@ -237,10 +273,16 @@ export function manageMovement(state: IProgramState, view: IRenderView) {
             let destAngle = new Vec3(289, 18.5, zoom);
             let destPos = bb.center();
 
-            let camInitial: ICameraPos = { angle: state.camera.angle, center: state.camera.center };
+            let camInitial: ICameraPos = {
+                angle: state.camera.angle,
+                center: state.camera.center,
+            };
             let camFinal: ICameraPos = { angle: destAngle, center: destPos };
 
-            let lerpDist = Math.max(camFinal.angle.dist(camInitial.angle), camFinal.center.dist(camInitial.center));
+            let lerpDist = Math.max(
+                camFinal.angle.dist(camInitial.angle),
+                camFinal.center.dist(camInitial.center)
+            );
             let duration = clamp(lerpDist * 1, 200, 2000); // Math.min(lerpDist * 0.1, 1.0);
             // compute camera target
             // lerp to target
@@ -259,21 +301,24 @@ export function manageMovement(state: IProgramState, view: IRenderView) {
         });
 
         for (let level of [current.level, ...current.parents])
-        if (level.label) {
-            level.label.visible = 1.0;
-        }
+            if (level.label) {
+                level.label.visible = 1.0;
+            }
     }
 
     if (mvmt.cameraLerp) {
         let lerp = mvmt.cameraLerp;
         lerp.t += view.dt;
         if (lerp.t >= lerp.duration) {
-             mvmt.cameraLerp = null;
-             lerp.t = lerp.duration;
+            mvmt.cameraLerp = null;
+            lerp.t = lerp.duration;
         }
         let t = lerp.t / lerp.duration;
         state.camera.angle = lerp.camInitial.angle.lerp(lerp.camFinal.angle, t);
-        state.camera.center = lerp.camInitial.center.lerp(lerp.camFinal.center, t);
+        state.camera.center = lerp.camInitial.center.lerp(
+            lerp.camFinal.center,
+            t
+        );
         state.markDirty();
     }
 
@@ -281,7 +326,6 @@ export function manageMovement(state: IProgramState, view: IRenderView) {
 }
 
 function constructNavLevels(model: IGptModelLayout) {
-
     function makeRow(children: INavLevel[]): void {
         for (let i = 0; i < children.length - 1; i++) {
             children[i].right = children[i + 1];
@@ -299,7 +343,7 @@ function constructNavLevels(model: IGptModelLayout) {
     let inputToks: INavLevel = {
         name: "Input Tokens",
         block: model.idxObj,
-    }
+    };
     let tokenEmbeds: INavLevel = {
         name: "Token Embeddings",
         block: model.tokEmbedObj,
@@ -341,8 +385,10 @@ function constructNavLevels(model: IGptModelLayout) {
     let transformers: INavLevel[] = model.blocks.map((block, i) => {
         let ln1 = makeLayerNorm("LN1", block.ln1);
 
-        function makeHead(head: IGptModelLayout['blocks'][0]['heads'][0], idx: number) {
-
+        function makeHead(
+            head: IGptModelLayout["blocks"][0]["heads"][0],
+            idx: number
+        ) {
             let qRow: INavLevel[] = [
                 { name: "Q Bias", block: head.qBiasBlock },
                 { name: "Q Weight", block: head.qWeightBlock },
@@ -364,11 +410,26 @@ function constructNavLevels(model: IGptModelLayout) {
             makeRow(kRow);
             makeRow(vRow);
 
-            let attnSm: INavLevel = { name: "Attention Softmax", block: head.attnMtxSm };
-            let attnAgg1: INavLevel = { name: "Attention Agg 1", block: head.attnMtxAgg1 };
-            let attnAgg2: INavLevel = { name: "Attention Agg 2", block: head.attnMtxAgg2 };
-            let attn: INavLevel = { name: "Attention Matrix", block: head.attnMtx };
-            let attnOut: INavLevel = { name: "Attention Output", block: head.vOutBlock };
+            let attnSm: INavLevel = {
+                name: "Attention Softmax",
+                block: head.attnMtxSm,
+            };
+            let attnAgg1: INavLevel = {
+                name: "Attention Agg 1",
+                block: head.attnMtxAgg1,
+            };
+            let attnAgg2: INavLevel = {
+                name: "Attention Agg 2",
+                block: head.attnMtxAgg2,
+            };
+            let attn: INavLevel = {
+                name: "Attention Matrix",
+                block: head.attnMtx,
+            };
+            let attnOut: INavLevel = {
+                name: "Attention Output",
+                block: head.vOutBlock,
+            };
 
             makeCol([qRow[0], kRow[0], vRow[0], attnSm]);
             makeCol([qRow[1], kRow[1], vRow[1], attnSm]);
@@ -379,7 +440,16 @@ function constructNavLevels(model: IGptModelLayout) {
 
             return {
                 name: "Head " + idx,
-                children: [...qRow, ...kRow, ...vRow, attnSm, attnAgg1, attnAgg2, attn, attnOut],
+                children: [
+                    ...qRow,
+                    ...kRow,
+                    ...vRow,
+                    attnSm,
+                    attnAgg1,
+                    attnAgg2,
+                    attn,
+                    attnOut,
+                ],
             };
         }
 
@@ -412,7 +482,7 @@ function constructNavLevels(model: IGptModelLayout) {
         let selfAttention: INavLevel = {
             name: "Self-Attention",
             label: block.selfAttendLabel,
-            children: [ln1, heads, projection, attnOutput]
+            children: [ln1, heads, projection, attnOutput],
         };
 
         let ln2 = makeLayerNorm("LN2", block.ln2);
@@ -434,7 +504,7 @@ function constructNavLevels(model: IGptModelLayout) {
                 { name: "FC Bias", block: block.mlpProjBias },
                 { name: "FC Weight", block: block.mlpProjWeight },
                 { name: "FC Output", block: block.mlpResult },
-            ]
+            ],
         };
         let mlpResidual: INavLevel = {
             name: "MLP Residual",
@@ -455,9 +525,7 @@ function constructNavLevels(model: IGptModelLayout) {
         };
     });
 
-    let outputs: INavLevel = {
-
-    };
+    let outputs: INavLevel = {};
 
     let topLevel: INavLevel = {
         name: "nanoGPT",
@@ -487,35 +555,50 @@ export const MovementControls: React.FC<{}> = () => {
     let progState = useProgramState();
 
     // ensure we can handle these touch events locally
-    useTouchEvents(controlsEl, 0, { alwaysSendDragEvent: true }, (ev) => ev.stopImmediatePropagation());
+    useTouchEvents(controlsEl, 0, { alwaysSendDragEvent: true }, (ev) =>
+        ev.stopImmediatePropagation()
+    );
 
     function handleDir(ev: React.MouseEvent, action: MovementAction) {
         progState.movement.action = action;
         progState.markDirty();
     }
 
-    function makeButton(action: MovementAction, icon: IconDefinition, isArrow: boolean = false) {
-        return <button className={clsx(s.control, isArrow && s.arrow)} onClick={ev => handleDir(ev, action)}><FontAwesomeIcon icon={icon} /></button>;
+    function makeButton(
+        action: MovementAction,
+        icon: IconDefinition,
+        isArrow: boolean = false
+    ) {
+        return (
+            <button
+                className={clsx(s.control, isArrow && s.arrow)}
+                onClick={(ev) => handleDir(ev, action)}
+            >
+                <FontAwesomeIcon icon={icon} />
+            </button>
+        );
     }
 
-    return <div ref={setControlsEl} className={s.controls}>
-        {makeButton(MovementAction.In, faMagnifyingGlassPlus)}
-        {makeButton(MovementAction.Up, faArrowUp, true)}
-        {makeButton(MovementAction.Out, faMagnifyingGlassMinus)}
+    return (
+        <div ref={setControlsEl} className={s.controls}>
+            {makeButton(MovementAction.In, faMagnifyingGlassPlus)}
+            {makeButton(MovementAction.Up, faArrowUp, true)}
+            {makeButton(MovementAction.Out, faMagnifyingGlassMinus)}
 
-        {makeButton(MovementAction.Left, faArrowLeft, true)}
-        {makeButton(MovementAction.Focus, faCircleDot)}
-        {makeButton(MovementAction.Right, faArrowRight, true)}
+            {makeButton(MovementAction.Left, faArrowLeft, true)}
+            {makeButton(MovementAction.Focus, faCircleDot)}
+            {makeButton(MovementAction.Right, faArrowRight, true)}
 
-        <div />
-        {makeButton(MovementAction.Down, faArrowDown, true)}
-        {makeButton(MovementAction.Expand, faExpand)}
-    </div>;
+            <div />
+            {makeButton(MovementAction.Down, faArrowDown, true)}
+            {makeButton(MovementAction.Expand, faExpand)}
+        </div>
+    );
 };
 
 function iterNavLevels(level: INavLevel, f: (level: INavLevel) => void) {
     if (level.children) {
-        level.children.forEach(child => iterNavLevels(child, f));
+        level.children.forEach((child) => iterNavLevels(child, f));
     }
     f(level);
 }

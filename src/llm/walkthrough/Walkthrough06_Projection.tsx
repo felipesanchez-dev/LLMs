@@ -19,27 +19,26 @@ export function walkthrough06_Projection(args: IWalkthroughArgs) {
 
     commentary(wt, null, 0)`
 
-After the self-attention process, we have outputs from each of the heads. These outputs are the
-appropriately mixed V vectors, influenced by the Q and K vectors.
+Después del proceso de auto-atención, tenemos salidas de cada una de las cabezas. Estas salidas son
+los vectores V apropiadamente mezclados, influenciados por los vectores Q y K.
 
-To combine the ${c_blockRef('output vectors', outBlocks)} from each head, we simply stack them on top of each other. So, for time
-${c_dimRef('t = 4', DimStyle.T)}, we go from 3 vectors of length ${c_dimRef('A = 16', DimStyle.A)} to 1 vector of length ${c_dimRef('C = 48', DimStyle.C)}.`;
+Para combinar los ${c_blockRef('vectores de salida', outBlocks)} de cada cabeza, simplemente los apilamos uno encima del otro. Así, para el tiempo
+${c_dimRef('t = 4', DimStyle.T)}, pasamos de 3 vectores de longitud ${c_dimRef('A = 16', DimStyle.A)} a 1 vector de longitud ${c_dimRef('C = 48', DimStyle.C)}.`;
 
     breakAfter();
 
     let t_fadeOut = afterTime(null, 1.0, 0.5);
-    // let t_zoomToStack = afterTime(null, 1.0);
     let t_stack = afterTime(null, 1.0);
 
     breakAfter();
 
     commentary(wt)`
 
-It's worth noting that in GPT, the length of the vectors within a head (${c_dimRef('A = 16', DimStyle.A)}) is equal to ${c_dimRef('C', DimStyle.C)} / num_heads.
-This ensures that when we stack them back together, we get the original length, ${c_dimRef('C', DimStyle.C)}.
+Vale la pena señalar que en GPT, la longitud de los vectores dentro de una cabeza (${c_dimRef('A = 16', DimStyle.A)}) es igual a ${c_dimRef('C', DimStyle.C)} / num_heads.
+Esto asegura que cuando los apilamos de nuevo juntos, obtenemos la longitud original, ${c_dimRef('C', DimStyle.C)}.
 
-From here, we perform the projection to get the output of the layer. This is a simple matrix-vector
-multiplication on a per-column basis, with a bias added.`;
+Desde aquí, realizamos la proyección para obtener la salida de la capa. Esta es una simple multiplicación
+matriz-vector por columnas, con un sesgo añadido.`;
 
     breakAfter();
 
@@ -49,9 +48,9 @@ multiplication on a per-column basis, with a bias added.`;
 
     commentary(wt)`
 
-Now we have the output of the self-attention layer. Instead of passing this output directly to the
-next phase, we add it element-wise to the input embedding. This process, denoted by the green
-vertical arrow, is called the _residual connection_ or _residual pathway_.
+Ahora tenemos la salida de la capa de auto-atención. En lugar de pasar esta salida directamente a la
+siguiente fase, la añadimos elemento por elemento a la incrustación de entrada. Este proceso, denotado
+por la flecha verde vertical, se llama _conexión residual_ o _vía residual_.
 `;
 
     breakAfter();
@@ -65,11 +64,11 @@ vertical arrow, is called the _residual connection_ or _residual pathway_.
 
     commentary(wt)`
 
-Like layer normalization, the residual pathway is important for enabling effective learning in deep
-neural networks.
+Al igual que la normalización de capas, la vía residual es importante para permitir un aprendizaje
+efectivo en redes neuronales profundas.
 
-Now with the result of self-attention in hand, we can pass it onto the next section of the transformer:
-the feed-forward network.
+Ahora con el resultado de la auto-atención en mano, podemos pasarlo a la siguiente sección del
+transformer: la red feed-forward.
 `;
 
     breakAfter();

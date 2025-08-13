@@ -13,17 +13,18 @@ export function walkthrough08_Transformer(args: IWalkthroughArgs) {
 
     let c0 = commentary(wt, null, 0)`
 
-And that's a complete transformer block!
+¡Y eso es un bloque transformer completo!
 
-These form the bulk of any GPT model and are repeated a number of times, with the output of one
-block feeding into the next, continuing the residual pathway.
+Estos forman la mayor parte de cualquier modelo GPT y se repiten varias veces, con la salida de un
+bloque alimentando al siguiente, continuando la vía residual.
 
-As is common in deep learning, it's hard to say exactly what each of these layers is doing, but we
-have some general ideas: the earlier layers tend to focus on learning
-lower-level features and patterns, while the later layers learn to recognize and understand
-higher-level abstractions and relationships. In the context of natural language processing, the
-lower layers might learn grammar, syntax, and simple word associations, while the higher layers
-might capture more complex semantic relationships, discourse structures, and context-dependent meaning.
+Como es común en el aprendizaje profundo, es difícil decir exactamente qué está haciendo cada una de
+estas capas, pero tenemos algunas ideas generales: las capas anteriores tienden a enfocarse en aprender
+características y patrones de bajo nivel, mientras que las capas posteriores aprenden a reconocer y
+entender abstracciones y relaciones de alto nivel. En el contexto del procesamiento de lenguaje natural,
+las capas inferiores pueden aprender gramática, sintaxis y asociaciones simples de palabras, mientras
+que las capas superiores pueden capturar relaciones semánticas más complejas, estructuras de discurso
+y significado dependiente del contexto.
 
 `;
 

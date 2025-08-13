@@ -1,6 +1,10 @@
 import { Vec3 } from "@/src/utils/vector";
 import { Phase } from "./Walkthrough";
-import { commentary, IWalkthroughArgs, setInitialCamera } from "./WalkthroughTools";
+import {
+    commentary,
+    IWalkthroughArgs,
+    setInitialCamera,
+} from "./WalkthroughTools";
 
 export function walkthrough05_Softmax(args: IWalkthroughArgs) {
     let { walkthrough: wt, state } = args;
@@ -9,50 +13,56 @@ export function walkthrough05_Softmax(args: IWalkthroughArgs) {
         return;
     }
 
-    setInitialCamera(state, new Vec3(-24.350, 0.000, -1702.195), new Vec3(283.100, 0.600, 1.556));
+    setInitialCamera(
+        state,
+        new Vec3(-24.35, 0.0, -1702.195),
+        new Vec3(283.1, 0.6, 1.556)
+    );
 
     let c0 = commentary(wt, null, 0)`
 
-The softmax operation is used as part of self-attention, as seen in the previous section, and it
-will also appear at the very end of the model.
+  La operación softmax se utiliza como parte de la auto-atención, como vimos en la sección anterior, y
+  también aparecerá al final del modelo.
 
-Its goal is to take a vector and normalize its values so that they sum to 1.0. However, it's not as
-simple as dividing by the sum. Instead, each input value is first exponentiated.
+  Su objetivo es tomar un vector y normalizar sus valores para que sumen 1.0. Sin embargo, no es tan
+  simple como dividir por la suma. En su lugar, cada valor de entrada se exponencia primero.
 
-  a = exp(x_1)
+    a = exp(x_1)
 
-This has the effect of making all values positive. Once we have a vector of our exponentiated
-values, we can then divide each value by the sum of all the values. This will ensure that the sum
-of the values is 1.0. Since all the exponentiated values are positive, we know that the resulting
-values will be between 0.0 and 1.0, which provides a probability distribution over the original values.
+  Esto tiene el efecto de hacer que todos los valores sean positivos. Una vez que tenemos un vector de
+  valores exponenciados, podemos dividir cada valor por la suma de todos los valores. Esto garantizará
+  que la suma de los valores sea 1.0. Dado que todos los valores exponenciados son positivos, sabemos
+  que los valores resultantes estarán entre 0.0 y 1.0, lo que proporciona una distribución de
+  probabilidad sobre los valores originales.
 
-That's it for softmax: simply exponentiate the values and then divide by the sum.
+  Eso es todo para softmax: simplemente exponenciar los valores y luego dividir por la suma.
 
-However, there's a slight complication. If any of the input values are quite large, then the
-exponentiated values will be very large. We'll end up dividing a large number by a very large number,
-and this can cause issues with floating-point arithmetic.
+  Sin embargo, hay una pequeña complicación. Si alguno de los valores de entrada es bastante grande,
+  entonces los valores exponenciados serán muy grandes. Terminaremos dividiendo un número grande por
+  un número muy grande, y esto puede causar problemas con la aritmética de punto flotante.
 
-One useful property of the softmax operation is that if we add a constant to all the input values,
-the result will be the same. So we can find the largest value in the input vector and subtract it
-from all the values. This ensures that the largest value is 0.0, and the softmax remains numerically
-stable.
+  Una propiedad útil de la operación softmax es que si agregamos una constante a todos los valores de
+  entrada, el resultado será el mismo. Así que podemos encontrar el valor más grande en el vector de
+  entrada y restarlo de todos los valores. Esto asegura que el valor más grande sea 0.0, y el softmax
+  permanezca numéricamente estable.
 
-Let's take a look at the softmax operation in the context of the self-attention layer. Our input
-vector for each softmax operation is a row of the self-attention matrix (but only up to the diagonal).
+  Echemos un vistazo a la operación softmax en el contexto de la capa de auto-atención. Nuestro vector
+  de entrada para cada operación softmax es una fila de la matriz de auto-atención (pero solo hasta
+  la diagonal).
 
-Like with layer normalization, we have an intermediate step where we store some aggregation values
-to keep the process efficient.
+  Al igual que con la normalización de capas, tenemos un paso intermedio donde almacenamos algunos
+  valores de agregación para mantener el proceso eficiente.
 
-For each row, we store the max value in the row and the sum of the shifted & exponentiated values.
-Then, to produce the corresponding output row, we can perform a small set of operations: subtract the
-max, exponentiate, and divide by the sum.
+  Para cada fila, almacenamos el valor máximo de la fila y la suma de los valores desplazados y
+  exponenciados. Luego, para producir la fila de salida correspondiente, podemos realizar un pequeño
+  conjunto de operaciones: restar el máximo, exponenciar y dividir por la suma.
 
-What's with the name "softmax"? The "hard" version of this operation, called argmax, simply finds
-the maximum value, sets it to 1.0, and assigns 0.0 to all other values. In contrast, the softmax
-operation serves as a "softer" version of that. Due to the exponentiation involved in softmax, the
-largest value is emphasized and pushed towards 1.0, while still maintaining a probability distribution
-over all input values. This allows for a more nuanced representation that captures not only the most
-likely option but also the relative likelihood of other options.
+  ¿Por qué el nombre "softmax"? La versión "dura" de esta operación, llamada argmax, simplemente
+  encuentra el valor máximo, lo establece en 1.0 y asigna 0.0 a todos los demás valores. En contraste,
+  la operación softmax sirve como una versión más "suave" de eso. Debido a la exponenciación involucrada
+  en softmax, el valor más grande se enfatiza y se empuja hacia 1.0, mientras aún mantiene una
+  distribución de probabilidad sobre todos los valores de entrada. Esto permite una representación más
+  matizada que captura no solo la opción más probable sino también la probabilidad relativa de otras
+  opciones.
 `;
-
 }

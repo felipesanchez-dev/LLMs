@@ -10,6 +10,11 @@ let dummySubs = new Subscriptions();
 
 export const FluidSimView: React.FC = () => {
     let [manager, setManager] = useState<FluidSimManager | null>(null);
+    let [isPlaying, setIsPlaying] = useState(false);
+    let [simulationSpeed, setSimulationSpeed] = useState(20);
+    let [pressureIterations, setPressureIterations] = useState(200);
+    let [showVelocityField, setShowVelocityField] = useState(true);
+    let [showTemperature, setShowTemperature] = useState(false);
 
     useSubscriptions(manager?.subscriptions ?? dummySubs);
 
@@ -21,10 +26,24 @@ export const FluidSimView: React.FC = () => {
             }
             let key = ev.key.toLowerCase();
             if (ev.key === ' ') {
+                ev.preventDefault();
+                handlePlayClicked();
+            }
+            if (ev.key === 's') {
+                ev.preventDefault();
                 handleStepClicked();
             }
-            if (ev.key === 'Backspace') {
+            if (ev.key === 'r') {
+                ev.preventDefault();
                 handleResetClicked();
+            }
+            if (ev.key === 'v') {
+                ev.preventDefault();
+                setShowVelocityField(!showVelocityField);
+            }
+            if (ev.key === 't') {
+                ev.preventDefault();
+                setShowTemperature(!showTemperature);
             }
         }
 
@@ -35,12 +54,13 @@ export const FluidSimView: React.FC = () => {
     });
 
     useEffect(() => {
-        console.log('canvasEl created; creating FluidSimManager');
+        console.log('Creando FluidSimManager - Simulador de fluidos iniciado');
         let manager = new FluidSimManager();
         setManager(manager);
         manager.markDirty();
 
         return () => {
+            console.log('Limpiando FluidSimManager - Simulador detenido');
             manager.looper.stopped = true;
             setManager(null);
         };
@@ -52,9 +72,12 @@ export const FluidSimView: React.FC = () => {
         if (!manager) {
             return;
         }
+        console.log('Reiniciando simulación de fluidos');
         manager.fluidSimState = initFluidSimState();
         manager.fluidSimState.sim.numPressureIterations = 0;
-        stepFluidSim(manager.fluidSimState.sim, 20);
+        stepFluidSim(manager.fluidSimState.sim, simulationSpeed);
+        setIsPlaying(false);
+        manager.fluidSimState.running = false;
         manager.markDirty();
     }
 
@@ -62,10 +85,8 @@ export const FluidSimView: React.FC = () => {
         if (!manager) {
             return;
         }
-        let prevNumPressureIterations = manager.fluidSimState.sim.numPressureIterations;
-        // manager.fluidSimState = initFluidSimState();
-        // manager.fluidSimState.sim.numPressureIterations = prevNumPressureIterations + 10;
-        stepFluidSim(manager.fluidSimState.sim, 20);
+        console.log('Ejecutando un paso de simulación');
+        stepFluidSim(manager.fluidSimState.sim, simulationSpeed);
         manager.markDirty();
     }
 
@@ -73,28 +94,185 @@ export const FluidSimView: React.FC = () => {
         if (!manager) {
             return;
         }
-        manager.fluidSimState.running = !manager.fluidSimState.running;
+        const newPlayingState = !manager.fluidSimState.running;
+        manager.fluidSimState.running = newPlayingState;
+        setIsPlaying(newPlayingState);
+        console.log(newPlayingState ? 'Iniciando simulación continua' : 'Pausando simulación');
         manager.markDirty();
     }
 
     let sim = manager?.fluidSimState.sim;
 
     return <div className={s.page}>
-        FluidSimView
-        {manager && sim && <>
-            <button onClick={handleResetClicked}>Reset</button>
-            <button onClick={handleStepClicked}>Step</button>
-            <button onClick={handlePlayClicked}>Play/Pause</button>
+        <div className="text-center mb-6">
+            <h1 className="text-3xl font-bold text-white mb-2">Simulación de Fluidos 2D</h1>
+            <p className="text-gray-300 max-w-2xl mx-auto">
+                Simulación interactiva de dinámicas de fluidos usando las ecuaciones de Navier-Stokes. 
+                Observa cómo se comportan la velocidad, temperatura y presión en tiempo real.
+            </p>
+        </div>
 
-            <div>Num Pressure Iterations: {sim.numPressureIterations}</div>
-            <div className={'flex flex-row'}>
-                <div className={'flex flex-col'}>
-                    <CanvasView manager={manager} sourceType={SourceType.VelocityVector} sourceArray={sim.cells} name={"Main"} />
-                    <CanvasView manager={manager} sourceType={SourceType.Scalar} sourceArray={sim.pressure0} name={"Pressure"} />
+        {manager && sim && <>
+            {/* Panel de Control Principal */}
+            <div className="bg-gray-800 rounded-lg p-4 mb-4 w-full max-w-4xl">
+                <div className="flex flex-wrap gap-4 items-center justify-center">
+                    <button 
+                        onClick={handlePlayClicked}
+                        className={`px-6 py-2 rounded font-medium transition-colors ${
+                            isPlaying 
+                                ? 'bg-red-600 hover:bg-red-700 text-white' 
+                                : 'bg-green-600 hover:bg-green-700 text-white'
+                        }`}
+                    >
+                        {isPlaying ? '⏸ Pausar' : '▶ Reproducir'}
+                    </button>
+                    
+                    <button 
+                        onClick={handleStepClicked}
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium transition-colors"
+                    >
+                        ⏭ Un Paso
+                    </button>
+                    
+                    <button 
+                        onClick={handleResetClicked}
+                        className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded font-medium transition-colors"
+                    >
+                        🔄 Reiniciar
+                    </button>
                 </div>
-                <div className={'flex flex-col'}>
-                    <CanvasView manager={manager} sourceType={SourceType.Scalar} sourceArray={sim.divergence0} name={"Divergence Initial"} />
-                    <CanvasView manager={manager} sourceType={SourceType.Scalar} sourceArray={sim.divergence1} name={"Divergence Validation"} />
+
+                {/* Controles de Parámetros */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    <div className="text-white">
+                        <label className="block text-sm font-medium mb-1">Velocidad de Simulación (ms)</label>
+                        <input 
+                            type="range" 
+                            min="1" 
+                            max="50" 
+                            value={simulationSpeed}
+                            onChange={(e) => setSimulationSpeed(Number(e.target.value))}
+                            className="w-full"
+                        />
+                        <span className="text-xs text-gray-300">{simulationSpeed}ms por paso</span>
+                    </div>
+
+                    <div className="text-white">
+                        <label className="block text-sm font-medium mb-1">Iteraciones de Presión</label>
+                        <input 
+                            type="range" 
+                            min="50" 
+                            max="500" 
+                            step="50"
+                            value={pressureIterations}
+                            onChange={(e) => setPressureIterations(Number(e.target.value))}
+                            className="w-full"
+                        />
+                        <span className="text-xs text-gray-300">{pressureIterations} iteraciones</span>
+                    </div>
+
+                    <div className="text-white">
+                        <label className="block text-sm font-medium mb-1">Visualización</label>
+                        <div className="space-y-1">
+                            <label className="flex items-center text-sm">
+                                <input 
+                                    type="checkbox" 
+                                    checked={showVelocityField}
+                                    onChange={(e) => setShowVelocityField(e.target.checked)}
+                                    className="mr-2"
+                                />
+                                Campo de Velocidad
+                            </label>
+                            <label className="flex items-center text-sm">
+                                <input 
+                                    type="checkbox" 
+                                    checked={showTemperature}
+                                    onChange={(e) => setShowTemperature(e.target.checked)}
+                                    className="mr-2"
+                                />
+                                Temperatura
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Estado de Simulación */}
+            <div className="bg-gray-700 rounded p-2 mb-4 text-white text-sm">
+                Iteraciones de Presión: {sim.numPressureIterations} | 
+                Estado: {isPlaying ? '▶ Ejecutándose' : '⏸ Pausado'}
+            </div>
+
+            {/* Visualización Principal */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full max-w-6xl">
+                <div className="flex flex-col gap-4">
+                    <CanvasView 
+                        manager={manager} 
+                        name="Campo de Velocidad Principal"
+                        sourceType={SourceType.VelocityVector}
+                        sourceArray={sim.cells}
+                    />
+                    <CanvasView 
+                        manager={manager} 
+                        name="Campo de Presión"
+                        sourceType={SourceType.Scalar}
+                        sourceArray={sim.pressure0}
+                    />
+                </div>
+                <div className="flex flex-col gap-4">
+                    <CanvasView 
+                        manager={manager} 
+                        name="Divergencia Inicial"
+                        sourceType={SourceType.Scalar}
+                        sourceArray={sim.divergence0}
+                    />
+                    <CanvasView 
+                        manager={manager} 
+                        name="Divergencia Final (Validación)"
+                        sourceType={SourceType.Scalar}
+                        sourceArray={sim.divergence1}
+                    />
+                </div>
+            </div>
+
+            {/* Información de Estado */}
+            {sim.aggregates && (
+                <div className="bg-gray-800 rounded-lg p-4 mt-4 w-full max-w-4xl">
+                    <h3 className="text-white font-medium mb-2">Propiedades Físicas del Fluido</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm text-gray-300">
+                        <div>
+                            <span className="block font-medium">Masa Total</span>
+                            <span>{sim.aggregates.totalMass.toFixed(3)} kg</span>
+                        </div>
+                        <div>
+                            <span className="block font-medium">Energía Cinética</span>
+                            <span>{sim.aggregates.totalKineticEnergy.toFixed(3)} J</span>
+                        </div>
+                        <div>
+                            <span className="block font-medium">Momento X</span>
+                            <span>{sim.aggregates.totalMomentumX.toFixed(3)} kg⋅m/s</span>
+                        </div>
+                        <div>
+                            <span className="block font-medium">Momento Y</span>
+                            <span>{sim.aggregates.totalMomentumY.toFixed(3)} kg⋅m/s</span>
+                        </div>
+                        <div>
+                            <span className="block font-medium">Temp. Promedio</span>
+                            <span>{sim.aggregates.averageTemperature.toFixed(3)} °C</span>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Controles de Teclado */}
+            <div className="bg-gray-800 rounded-lg p-4 mt-4 w-full max-w-4xl">
+                <h3 className="text-white font-medium mb-2">Controles de Teclado</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-300">
+                    <div><kbd className="bg-gray-700 px-2 py-1 rounded">Espacio</kbd> - Reproducir/Pausar</div>
+                    <div><kbd className="bg-gray-700 px-2 py-1 rounded">S</kbd> - Un Paso</div>
+                    <div><kbd className="bg-gray-700 px-2 py-1 rounded">R</kbd> - Reiniciar</div>
+                    <div><kbd className="bg-gray-700 px-2 py-1 rounded">V</kbd> - Toggle Campo de Velocidad</div>
+                    <div><kbd className="bg-gray-700 px-2 py-1 rounded">T</kbd> - Toggle Temperatura</div>
                 </div>
             </div>
         </>}
@@ -130,10 +308,16 @@ const CanvasView: React.FC<{
         }
     });
 
-    return <div className="flex flex-col m-2">
-        <div className="text-center">{name}</div>
-        <div className="aspect-square relative overflow-hidden flex-none w-[256px] h-[256px]">
+    return <div className="flex flex-col items-center bg-gray-900 rounded-lg p-3">
+        <div className="text-white text-sm font-medium mb-2 text-center">{name}</div>
+        <div className="aspect-square relative overflow-hidden flex-none w-[280px] h-[280px] border border-gray-600 rounded">
             <canvas ref={setCanvasEl} className={s.canvas} />
+        </div>
+        <div className="text-xs text-gray-400 mt-1 text-center max-w-[280px]">
+            {renderOpts.sourceType === SourceType.VelocityVector ? 
+                'Vectores muestran dirección y magnitud de velocidad' : 
+                'Colores representan intensidad del campo escalar'
+            }
         </div>
     </div>;
 }

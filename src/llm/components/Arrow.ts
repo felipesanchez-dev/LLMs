@@ -1,35 +1,10 @@
-
-/* Arrow Design:
-
-This is a flat, rectangular, ribbon-like pathway with lines down the edges.
-
-It has a defined width. The ribbon might have some motion animation when I write the shader for it.
-
-The sides will have lines to border the transparent ribbon.
-
-We define a start, end, width, and "normal". The normal is perpendicular to the direction of the arrow,
-and the normal lies within all parts of the ribbon.
-
-The ribbon can bend, subject to the normal. The ribbon always starts in-plane. We'll have to do some
-curve generation to make the ribbon bend. (this probably requires a 3rd degree bezier curve)
-
-The arrow head is fairly flat, and is a triangle. We define the depth of the arrow head, and the
-width. Not sure if the width should be a constant, or proportional to the width/length of the arrow.
-
-Arrows will also have padding between blocks.
-
-Some special arrows bend at the start in the plane of the ribbon, where they diverge from a vertical arrow.
-
-This should be able to be implemented just with lines & tris. Depth buf will be interesting.
-*/
-
 import { IBlkDef, IGptModelLayout } from "../GptModelLayout";
-import { addLine, drawLineSegs, ILineOpts, makeLineOpts } from "../render/lineRender";
+import { drawLineSegs, makeLineOpts } from "../render/lineRender";
 import { IRenderState } from "../render/modelRender";
 import { addPrimitiveRestart, addQuad, addVert } from "../render/triRender";
 import { bezierCurveBuild } from "@/src/utils/bezier";
 import { Mat4f } from "@/src/utils/matrix";
-import { Vec3, Vec3Buf, Vec4 } from "@/src/utils/vector";
+import { Vec3, Vec4 } from "@/src/utils/vector";
 
 export function drawAllArrows(state: IRenderState, layout: IGptModelLayout) {
 

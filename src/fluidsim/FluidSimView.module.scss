@@ -3,17 +3,22 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100%;
+    justify-content: flex-start;
+    min-height: 100vh;
     width: 100%;
-    // background-color: #000000;
-    overflow: hidden;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 2rem 1rem;
+    overflow-y: auto;
+    color: white;
 }
 
 .canvasWrap {
     position: relative;
     height: 500px;
     width: 500px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .canvas {
@@ -21,6 +26,9 @@
     height: 100%;
     background-color: #000000;
     overflow: hidden;
-    // make sure pixels show up blocky
+    // Hacer que los píxeles se vean pixelados para mejor visualización
     image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    border-radius: 4px;
 }

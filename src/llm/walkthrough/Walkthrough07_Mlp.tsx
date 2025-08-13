@@ -24,20 +24,20 @@ export function walkthrough07_Mlp(args: IWalkthroughArgs) {
 
     commentary(wt)`
 
-The next half of the transformer block, after the self-attention, is the MLP (multi-layer
-perceptron). A bit of a mouthful, but here it's a simple neural network with two layers.
+La siguiente mitad del bloque transformer, después de la auto-atención, es el MLP (perceptrón multicapa).
+Un nombre un poco complicado, pero aquí es una red neuronal simple con dos capas.
 
-Like with self-attention, we perform a ${c_blockRef('layer normalization', block.ln2.lnResid)} before the vectors enter the MLP.
+Al igual que con la auto-atención, realizamos una ${c_blockRef('normalización de capas', block.ln2.lnResid)} antes de que los vectores entren al MLP.
 
-In the MLP, we put each of our ${c_dimRef('C = 48', DimStyle.C)} length column vectors (independently) through:
+En el MLP, ponemos cada uno de nuestros vectores columna de longitud ${c_dimRef('C = 48', DimStyle.C)} (independientemente) a través de:
 
-1. A ${c_blockRef('linear transformation', block.mlpFcWeight)} with a ${c_blockRef('bias', block.mlpFcBias)} added, to a vector of length ${c_dimRef('4 * C', DimStyle.C4)}.
+1. Una ${c_blockRef('transformación lineal', block.mlpFcWeight)} con un ${c_blockRef('sesgo', block.mlpFcBias)} añadido, a un vector de longitud ${c_dimRef('4 * C', DimStyle.C4)}.
 
-2. A GELU activation function (element-wise)
+2. Una función de activación GELU (elemento por elemento)
 
-3. A ${c_blockRef('linear transformation', block.mlpProjWeight)} with a ${c_blockRef('bias', block.mlpProjBias)} added, back to a vector of length ${c_dimRef('C', DimStyle.C)}
+3. Una ${c_blockRef('transformación lineal', block.mlpProjWeight)} con un ${c_blockRef('sesgo', block.mlpProjBias)} añadido, de vuelta a un vector de longitud ${c_dimRef('C', DimStyle.C)}
 
-Let's track one of those vectors:
+Sigamos uno de esos vectores:
 `;
     breakAfter();
 
@@ -46,8 +46,8 @@ Let's track one of those vectors:
     breakAfter();
 
 commentary(wt)`
-We first run through the matrix-vector multiplication with bias added, expanding the vector to length ${c_dimRef('4 * C', DimStyle.C4)}. (Note that the output matrix is transposed here.
-This is purely for vizualization purposes.)
+Primero ejecutamos la multiplicación matriz-vector con sesgo añadido, expandiendo el vector a longitud ${c_dimRef('4 * C', DimStyle.C4)}. (Nota que la matriz de salida está transpuesta aquí.
+Esto es puramente para propósitos de visualización.)
 `;
     breakAfter();
 
@@ -56,8 +56,8 @@ This is purely for vizualization purposes.)
     breakAfter();
 
 commentary(wt)`
-Next, we apply the GELU activation function to each element of the vector. This is a key part of any neural network, where we introduce some non-linearity into the model. The specific function used, GELU,
-looks a lot like a ReLU function (computed as ${<code>max(0, x)</code>}), but it has a smooth curve rather than a sharp corner.
+Luego, aplicamos la función de activación GELU a cada elemento del vector. Esta es una parte clave de cualquier red neuronal, donde introducimos algo de no-linealidad en el modelo. La función específica utilizada, GELU,
+se ve muy parecida a una función ReLU (calculada como ${<code>max(0, x)</code>}), pero tiene una curva suave en lugar de una esquina afilada.
 
 ${<ReluGraph />}
 
@@ -69,7 +69,7 @@ ${<ReluGraph />}
     breakAfter();
 
 commentary(wt)`
-We then project the vector back down to length ${c_dimRef('C', DimStyle.C)} with another matrix-vector multiplication with bias added.
+Luego proyectamos el vector de vuelta a longitud ${c_dimRef('C', DimStyle.C)} con otra multiplicación matriz-vector con sesgo añadido.
 `;
     breakAfter();
 
@@ -78,7 +78,7 @@ We then project the vector back down to length ${c_dimRef('C', DimStyle.C)} with
     breakAfter();
 
 commentary(wt)`
-Like in the self-attention + projection section, we add the result of the MLP to its input, element-wise.
+Al igual que en la sección de auto-atención + proyección, añadimos el resultado del MLP a su entrada, elemento por elemento.
 `;
     breakAfter();
 
@@ -86,7 +86,7 @@ Like in the self-attention + projection section, we add the result of the MLP to
 
     breakAfter();
 commentary(wt)`
-We can now repeat this process for all of the columns in the input.`;
+Ahora podemos repetir este proceso para todas las columnas en la entrada.`;
 
     breakAfter();
 
@@ -97,7 +97,7 @@ We can now repeat this process for all of the columns in the input.`;
     breakAfter();
 
 commentary(wt)`
-And that's the MLP completed. We now have the output of the transformer block, which is ready to be passed to the next block.
+Y así se completa el MLP. Ahora tenemos la salida del bloque transformer, que está lista para ser pasada al siguiente bloque.
 `;
 
     let targetIdx = 3;
