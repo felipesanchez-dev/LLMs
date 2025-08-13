@@ -1,5 +1,9 @@
 import { Subscriptions, useSubscriptions } from "@/src/utils/hooks";
-import { IElfTextSection, listElfTextSections, readElfHeader } from "../ElfParser";
+import {
+    IElfTextSection,
+    listElfTextSections,
+    readElfHeader,
+} from "../ElfParser";
 
 export interface ICodeSuite {
     title: string;
@@ -21,13 +25,18 @@ export class CodeSuiteManager {
     public suites = new Map<string, ICodeSuite>();
 
     constructor() {
-        this.registerSuite('add_tests.elf', 'Test Suite');
-        this.registerSuite('blinky.elf', 'Blinky');
-        this.registerSuite('blinky2.elf', 'Blinky 2');
+        this.registerSuite("add_tests.elf", "Test Suite");
+        this.registerSuite("blinky.elf", "Blinky");
+        this.registerSuite("blinky2.elf", "Blinky 2");
     }
 
     public registerSuite(fileName: string, title: string) {
-        this.suites.set(fileName, { title, fileName, entries: [], loaded: false });
+        this.suites.set(fileName, {
+            title,
+            fileName,
+            entries: [],
+            loaded: false,
+        });
     }
 
     public getSuite(fileName: string) {
@@ -46,12 +55,18 @@ export class CodeSuiteManager {
     }
 
     private async loadSuite(suite: ICodeSuite) {
-        let basePath = (process.env.BASE_URL ?? '') + '/riscv/examples/';
+        if (typeof window === "undefined") {
+            return;
+        }
+
+        let basePath = (process.env.BASE_URL ?? "") + "/riscv/examples/";
         let resp = await fetch(basePath + suite.fileName);
 
         if (!resp.ok) {
             let respBody = await resp.text();
-            suite.loadError = `Load failed: ${resp.status} ${resp.statusText} body:'${respBody.slice(0, 200)}'`;
+            suite.loadError = `Load failed: ${resp.status} ${
+                resp.statusText
+            } body:'${respBody.slice(0, 200)}'`;
             this.subs.notify();
             return;
         }
@@ -61,13 +76,13 @@ export class CodeSuiteManager {
         let header = readElfHeader(elfFile)!;
         let sections = listElfTextSections(elfFile, header);
 
-        let examples = sections.map(section => {
+        let examples = sections.map((section) => {
             // name is '.text_add0', and we want 'add0'
             let name = section.name.slice(6) || section.name;
             return {
                 name,
                 elfSection: section,
-                expectFail: name.startsWith('must_fail'),
+                expectFail: name.startsWith("must_fail"),
             };
         });
 
