@@ -345,41 +345,60 @@ flowchart TD
 
     K --> L[Next Layer Input]
 
-    style C fill:#ffcdd2
-    style D fill:#c8e6c9
-    style E fill:#fff9c4
-    style F fill:#e1bee7
+    %% Estilos mejorados con mejor contraste
+    style A fill:#2196F3,stroke:#0D47A1,stroke-width:2px,color:#ffffff
+    style B fill:#FF9800,stroke:#E65100,stroke-width:3px,color:#ffffff
+    
+    style C fill:#F44336,stroke:#B71C1C,stroke-width:2px,color:#ffffff
+    style D fill:#4CAF50,stroke:#2E7D32,stroke-width:2px,color:#ffffff
+    style E fill:#FFC107,stroke:#F57F17,stroke-width:2px,color:#000000
+    style F fill:#9C27B0,stroke:#4A148C,stroke-width:2px,color:#ffffff
+    
+    style G fill:#FF5722,stroke:#BF360C,stroke-width:2px,color:#ffffff
+    style H fill:#8BC34A,stroke:#33691E,stroke-width:2px,color:#ffffff
+    style I fill:#FF8F00,stroke:#E65100,stroke-width:2px,color:#ffffff
+    style J fill:#673AB7,stroke:#311B92,stroke-width:2px,color:#ffffff
+    
+    style K fill:#607D8B,stroke:#263238,stroke-width:3px,color:#ffffff
+    style L fill:#795548,stroke:#3E2723,stroke-width:2px,color:#ffffff
 ```
 
 #### Métricas de Desarrollo
 
 ```mermaid
-gitgraph
-    commit id: "Initial commit"
-    commit id: "Setup Next.js project"
-    commit id: "Add WebGL rendering"
-    branch feature/llm-viz
-    checkout feature/llm-viz
-    commit id: "Implement GPT model"
-    commit id: "Add 3D visualization"
-    commit id: "WebGL shaders"
-    checkout main
-    merge feature/llm-viz
-    commit id: "Spanish translation"
-    branch feature/cpu-sim
-    checkout feature/cpu-sim
-    commit id: "RISC-V simulator"
-    commit id: "Component library"
-    checkout main
-    merge feature/cpu-sim
-    branch feature/fluid-sim
-    checkout feature/fluid-sim
-    commit id: "Navier-Stokes solver"
-    commit id: "WebGPU integration"
-    checkout main
-    merge feature/fluid-sim
-    commit id: "Performance optimizations"
-    commit id: "Documentation update"
+graph TD
+    A[Initial commit] --> B[Setup Next.js project]
+    B --> C[Add WebGL rendering]
+    C --> D[Branch: feature/llm-viz]
+    
+    D --> E[Implement GPT model]
+    E --> F[Add 3D visualization]
+    F --> G[WebGL shaders]
+    G --> H[Merge to main]
+    
+    H --> I[Spanish translation]
+    I --> J[Branch: feature/cpu-sim]
+    
+    J --> K[RISC-V simulator]
+    K --> L[Component library]
+    L --> M[Merge to main]
+    
+    M --> N[Branch: feature/fluid-sim]
+    N --> O[Navier-Stokes solver]
+    O --> P[WebGPU integration]
+    P --> Q[Merge to main]
+    
+    Q --> R[Performance optimizations]
+    R --> S[Documentation update]
+    
+    style A fill:#e3f2fd
+    style D fill:#fff3e0
+    style H fill:#e8f5e8
+    style J fill:#fff3e0
+    style M fill:#e8f5e8
+    style N fill:#fff3e0
+    style Q fill:#e8f5e8
+    style S fill:#f3e5f5
 ```
 
 #### Métricas de Performance
@@ -391,52 +410,6 @@ pie title "Tiempo de Renderizado por Operación"
     "Layer Normalization" : 15
     "Softmax" : 12
     "Embeddings" : 10
-```
-
-#### Arquitectura de Módulos
-
-```mermaid
-graph TB
-    subgraph "Frontend Layer"
-        A[React Components]
-        B[Next.js App Router]
-        C[Tailwind Styling]
-    end
-
-    subgraph "Visualization Layer"
-        D[WebGL Renderer]
-        E[3D Scene Manager]
-        F[Animation System]
-    end
-
-    subgraph "Computation Layer"
-        G[GPU Shaders]
-        H[WASM Modules]
-        I[Tensor Operations]
-    end
-
-    subgraph "Data Layer"
-        J[Model Weights]
-        K[Validation Data]
-        L[Configuration]
-    end
-
-    A --> D
-    B --> A
-    C --> A
-    D --> G
-    E --> D
-    F --> E
-    G --> H
-    H --> I
-    I --> J
-    J --> K
-    K --> L
-
-    style A fill:#61dafb
-    style D fill:#ff6b6b
-    style G fill:#4ecdc4
-    style J fill:#ffe66d
 ```
 
 ### Arquitectura de Simulación CPU (RISC-V)
@@ -477,11 +450,25 @@ graph TB
     H --> M
     I --> N
 
-    style A fill:#e3f2fd
-    style C fill:#f3e5f5
-    style F fill:#fff3e0
-    style K fill:#e8f5e8
+    %% Estilos mejorados con mejor contraste
+    style A fill:#2196F3,stroke:#0D47A1,stroke-width:2px,color:#ffffff
+    style B fill:#4CAF50,stroke:#2E7D32,stroke-width:2px,color:#ffffff
+    style C fill:#FF5722,stroke:#BF360C,stroke-width:3px,color:#ffffff
+    style D fill:#9C27B0,stroke:#4A148C,stroke-width:2px,color:#ffffff
+    style E fill:#607D8B,stroke:#263238,stroke-width:2px,color:#ffffff
+    
+    style F fill:#FF9800,stroke:#E65100,stroke-width:2px,color:#ffffff
+    style G fill:#795548,stroke:#3E2723,stroke-width:2px,color:#ffffff
+    style H fill:#009688,stroke:#004D40,stroke-width:2px,color:#ffffff
+    style I fill:#E91E63,stroke:#880E4F,stroke-width:2px,color:#ffffff
+    style J fill:#673AB7,stroke:#311B92,stroke-width:2px,color:#ffffff
+    
+    style K fill:#8BC34A,stroke:#33691E,stroke-width:2px,color:#ffffff
+    style L fill:#FFC107,stroke:#F57F17,stroke-width:2px,color:#000000
+    style M fill:#3F51B5,stroke:#1A237E,stroke-width:2px,color:#ffffff
+    style N fill:#FF1744,stroke:#B71C1C,stroke-width:2px,color:#ffffff
 ```
+
 
 ### Sistema de Simulación de Fluidos
 
@@ -520,10 +507,25 @@ graph TD
     N --> O[User Interaction]
     O --> A
 
-    style E fill:#e1f5fe
-    style F fill:#f3e5f5
-    style G fill:#fff3e0
-    style H fill:#e8f5e8
+    %% Estilos mejorados para mayor visibilidad
+    style A fill:#2196F3,stroke:#0D47A1,stroke-width:3px,color:#ffffff
+    style B fill:#4CAF50,stroke:#2E7D32,stroke-width:2px,color:#ffffff
+    style C fill:#FF9800,stroke:#E65100,stroke-width:2px,color:#ffffff
+    style D fill:#9C27B0,stroke:#4A148C,stroke-width:2px,color:#ffffff
+    
+    style E fill:#3F51B5,stroke:#1A237E,stroke-width:2px,color:#ffffff
+    style F fill:#E91E63,stroke:#880E4F,stroke-width:2px,color:#ffffff
+    style G fill:#FFC107,stroke:#F57F17,stroke-width:2px,color:#000000
+    style H fill:#8BC34A,stroke:#33691E,stroke-width:2px,color:#ffffff
+    
+    style I fill:#607D8B,stroke:#263238,stroke-width:3px,color:#ffffff
+    style J fill:#FF5722,stroke:#BF360C,stroke-width:2px,color:#ffffff
+    style K fill:#673AB7,stroke:#311B92,stroke-width:2px,color:#ffffff
+    style L fill:#795548,stroke:#3E2723,stroke-width:2px,color:#ffffff
+    style M fill:#009688,stroke:#004D40,stroke-width:2px,color:#ffffff
+    
+    style N fill:#FF1744,stroke:#B71C1C,stroke-width:2px,color:#ffffff
+    style O fill:#00BCD4,stroke:#006064,stroke-width:2px,color:#ffffff
 ```
 
 ### Diagrama de Dependencias del Sistema
