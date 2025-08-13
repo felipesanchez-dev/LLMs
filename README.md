@@ -616,7 +616,7 @@ npm >= 8.0.0
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/felipesanchez-dev/llm-viz.git
+git clone https://github.com/felipesanchez-dev/LLMs.git
 cd llm-viz
 
 # 2. Instalar dependencias
