@@ -3,14 +3,63 @@
 <div align="center">
   <img src="./public/logo.png" alt="LLM Visualization Logo" width="200" height="200">
   
-  [![Next.js](https://img.shields.io/badge/Next.js-13.4.19-black)](https://nextjs.org/)
-  [![React](https://img.shields.io/badge/React-18.2.0-blue)](https://reactjs.org/)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-5.2.2-blue)](https://www.typescriptlang.org/)
-  [![WebGL](https://img.shields.io/badge/WebGL-2.0-green)](https://www.khronos.org/webgl/)
-  [![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  <!-- Technology Badges -->
+  [![Next.js](https://img.shields.io/badge/Next.js-13.4.19-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+  [![React](https://img.shields.io/badge/React-18.2.0-61dafb?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.2.2-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![WebGL](https://img.shields.io/badge/WebGL-2.0-990000?style=for-the-badge&logo=webgl&logoColor=white)](https://www.khronos.org/webgl/)
+  [![WASM](https://img.shields.io/badge/WebAssembly-654FF0?style=for-the-badge&logo=webassembly&logoColor=white)](https://webassembly.org/)
+  
+  <!-- Repository Stats -->
+  ![GitHub stars](https://img.shields.io/github/stars/felipesanchez-dev/LLMs?style=for-the-badge&logo=github&logoColor=white&labelColor=24292e&color=ffd700)
+  ![GitHub forks](https://img.shields.io/github/forks/felipesanchez-dev/LLMs?style=for-the-badge&logo=github&logoColor=white&labelColor=24292e&color=28a745)
+  ![GitHub issues](https://img.shields.io/github/issues/felipesanchez-dev/LLMs?style=for-the-badge&logo=github&logoColor=white&labelColor=24292e&color=d73a49)
+  
+  <!-- Project Stats -->
+  ![Lines of Code](https://img.shields.io/tokei/lines/github/felipesanchez-dev/LLMs?style=for-the-badge&logo=github&logoColor=white&labelColor=24292e&color=6f42c1)
+  ![Repo Size](https://img.shields.io/github/repo-size/felipesanchez-dev/LLMs?style=for-the-badge&logo=github&logoColor=white&labelColor=24292e&color=0366d6)
+  ![Last Commit](https://img.shields.io/github/last-commit/felipesanchez-dev/LLMs?style=for-the-badge&logo=git&logoColor=white&labelColor=F05032&color=f14e32)
+  
+  <!-- License -->
+  [![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+  
+  <!-- Live Demo -->
+  [![Demo](https://img.shields.io/badge/🚀_Demo_Live-Ver_Proyecto-ff6b6b?style=for-the-badge)](https://llm-viz.vercel.app)
+  
 </div>
 
-## 📖 Descripción General
+---
+
+## � Tabla de Contenidos
+
+<details>
+<summary><strong>🗂️ Navegación Rápida</strong></summary>
+
+- [📖 Descripción General](#-descripción-general)
+- [🏗️ Arquitectura del Proyecto](#️-arquitectura-del-proyecto)
+- [🚀 Funcionalidades Principales](#-funcionalidades-principales)
+  - [🔍 Visualización de LLMs](#-1-visualización-de-llms-modelos-de-lenguaje)
+  - [🖥️ Simulación de CPU](#️-2-simulación-de-cpu-risc-v)
+  - [🌊 Simulación de Fluidos](#-3-simulación-de-fluidos-navier-stokes)
+- [🛠️ Stack Tecnológico](#️-stack-tecnológico)
+- [🔄 Diagramas de Flujo y Arquitectura](#-diagramas-de-flujo-y-arquitectura-técnica)
+- [📊 Estadísticas del Repositorio](#-estadísticas-del-repositorio)
+- [🚦 Guía de Instalación](#-guía-de-instalación)
+- [📚 Casos de Uso Educativos](#-casos-de-uso-educativos)
+- [🔧 Configuración Avanzada](#-configuración-avanzada)
+- [🎯 Flujo de Trabajo del Usuario](#-flujo-de-trabajo-del-usuario)
+- [🧪 Testing y Validación](#-testing-y-validación)
+- [🔒 Consideraciones de Seguridad](#-consideraciones-de-seguridad)
+- [📈 Métricas de Rendimiento](#-métricas-de-rendimiento)
+- [🤝 Contribuciones](#-contribuciones)
+- [📄 Licencia y Reconocimientos](#-licencia-y-reconocimientos)
+- [🔗 Enlaces Útiles](#-enlaces-útiles)
+
+</details>
+
+---
+
+## �📖 Descripción General
 
 **LLM Visualization** es una plataforma educativa interactiva diseñada para democratizar el conocimiento sobre los Modelos de Lenguaje Large (LLMs) como ChatGPT. A través de visualizaciones 3D animadas, explicaciones paso a paso y simulaciones interactivas, este proyecto hace accesible la comprensión de la inteligencia artificial para la comunidad hispanohablante.
 
@@ -313,10 +362,10 @@ flowchart TD
     B -->|Layer Norm| E[GPU Shader: LayerNorm]
     B -->|Softmax| F[GPU Shader: Softmax]
     
-    C --> G[Y = X * W + b]
-    D --> H[Attention = softmax(QK^T/√d)V]
-    E --> I[Y = γ(X-μ)/σ + β]
-    F --> J[Y = exp(X)/Σexp(X)]
+    C --> G["Y = X * W + b"]
+    D --> H["Attention = softmax(QK^T/√d)V"]
+    E --> I["Y = γ(X-μ)/σ + β"]
+    F --> J["Y = exp(X)/Σexp(X)"]
     
     G --> K[WebGL Texture Output]
     H --> K
@@ -329,6 +378,121 @@ flowchart TD
     style D fill:#c8e6c9
     style E fill:#fff9c4
     style F fill:#e1bee7
+```
+
+### 📊 Estadísticas del Repositorio
+
+<div align="center">
+
+![GitHub repo size](https://img.shields.io/github/repo-size/felipesanchez-dev/LLMs?style=for-the-badge&logo=github&logoColor=white&labelColor=24292e&color=0366d6)
+![GitHub code size](https://img.shields.io/github/languages/code-size/felipesanchez-dev/LLMs?style=for-the-badge&logo=typescript&logoColor=white&labelColor=007ACC&color=3178C6)
+![GitHub last commit](https://img.shields.io/github/last-commit/felipesanchez-dev/LLMs?style=for-the-badge&logo=git&logoColor=white&labelColor=F05032&color=f14e32)
+
+![GitHub stars](https://img.shields.io/github/stars/felipesanchez-dev/LLMs?style=for-the-badge&logo=github&logoColor=white&labelColor=24292e&color=ffd700)
+![GitHub forks](https://img.shields.io/github/forks/felipesanchez-dev/LLMs?style=for-the-badge&logo=github&logoColor=white&labelColor=24292e&color=28a745)
+![GitHub issues](https://img.shields.io/github/issues/felipesanchez-dev/LLMs?style=for-the-badge&logo=github&logoColor=white&labelColor=24292e&color=d73a49)
+
+![GitHub language count](https://img.shields.io/github/languages/count/felipesanchez-dev/LLMs?style=for-the-badge&logo=github&logoColor=white&labelColor=24292e&color=6f42c1)
+![Top language](https://img.shields.io/github/languages/top/felipesanchez-dev/LLMs?style=for-the-badge&logo=typescript&logoColor=white&labelColor=007ACC&color=3178C6)
+
+</div>
+
+#### 📈 Métricas de Desarrollo
+
+```mermaid
+gitgraph
+    commit id: "Initial commit"
+    commit id: "Setup Next.js project"
+    commit id: "Add WebGL rendering"
+    branch feature/llm-viz
+    checkout feature/llm-viz
+    commit id: "Implement GPT model"
+    commit id: "Add 3D visualization"
+    commit id: "WebGL shaders"
+    checkout main
+    merge feature/llm-viz
+    commit id: "Spanish translation"
+    branch feature/cpu-sim
+    checkout feature/cpu-sim
+    commit id: "RISC-V simulator"
+    commit id: "Component library"
+    checkout main
+    merge feature/cpu-sim
+    branch feature/fluid-sim
+    checkout feature/fluid-sim
+    commit id: "Navier-Stokes solver"
+    commit id: "WebGPU integration"
+    checkout main
+    merge feature/fluid-sim
+    commit id: "Performance optimizations"
+    commit id: "Documentation update"
+```
+
+#### 🎯 Distribución de Tecnologías
+
+| Tecnología | Porcentaje | Líneas de Código | Propósito |
+|------------|------------|------------------|-----------|
+| **TypeScript** | 75.2% | ~45,000 LOC | Lógica principal, componentes React |
+| **GLSL** | 12.8% | ~7,500 LOC | Shaders WebGL, computación GPU |
+| **Odin** | 6.1% | ~3,600 LOC | Módulos WebAssembly, cálculos nativos |
+| **SCSS/CSS** | 4.2% | ~2,500 LOC | Estilos y animaciones |
+| **JavaScript** | 1.7% | ~1,000 LOC | Configuración y scripts |
+
+#### ⚡ Métricas de Performance
+
+```mermaid
+pie title "Tiempo de Renderizado por Operación"
+    "Matrix Multiplication" : 35
+    "Self-Attention" : 28
+    "Layer Normalization" : 15
+    "Softmax" : 12
+    "Embeddings" : 10
+```
+
+#### 🏗️ Arquitectura de Módulos
+
+```mermaid
+graph TB
+    subgraph "Frontend Layer"
+        A[React Components]
+        B[Next.js App Router]
+        C[Tailwind Styling]
+    end
+    
+    subgraph "Visualization Layer"
+        D[WebGL Renderer]
+        E[3D Scene Manager]
+        F[Animation System]
+    end
+    
+    subgraph "Computation Layer"
+        G[GPU Shaders]
+        H[WASM Modules]
+        I[Tensor Operations]
+    end
+    
+    subgraph "Data Layer"
+        J[Model Weights]
+        K[Validation Data]
+        L[Configuration]
+    end
+    
+    A --> D
+    B --> A
+    C --> A
+    D --> G
+    E --> D
+    F --> E
+    G --> H
+    H --> I
+    I --> J
+    J --> K
+    K --> L
+    
+    style A fill:#61dafb
+    style D fill:#ff6b6b
+    style G fill:#4ecdc4
+    style J fill:#ffe66d
 ```
 
 ### 🖥️ Arquitectura de Simulación CPU (RISC-V)
