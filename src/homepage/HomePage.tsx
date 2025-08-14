@@ -198,7 +198,7 @@ export const HomePage: React.FC = () => {
                         similares.
                     </p>
                     <span className="font-bold">
-                        Todos los creditos correspondientes
+                        © Todos los creditos correspondientes
                     </span>
                     
                     </div>
